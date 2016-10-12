@@ -4,33 +4,33 @@ using System.Collections;
 public class StageGenerator : MonoBehaviour {
     private GameObject NextRoad;
     public bool Flag;
+    private BoxCollider Trigger;
+    private int Count;
 	// Use this for initialization
 	void Start () {
-        Flag = false;
-
+        Count = 0;
+        
+        //NextRoad.SetActive(false);
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+
+    }
 
     //void OnCollisionEnter(Collision collision)
     void OnTriggerEnter(Collider col)
     {
-       // if (!Flag)
-      //  {
-            if (col.gameObject.tag == "Player")
-            {
-                Vector3 NextPos;
-                NextPos = this.transform.position;
-                NextPos.z += 50.0f;
-                NextRoad = Instantiate(this.gameObject);
-                NextRoad.transform.position = NextPos;
+        if (col.gameObject.tag == "Player")
+        {
+            Vector3 NextPos;
+            NextPos = this.transform.position;
+            NextPos.z += 100.0f;
+            NextRoad = Instantiate(this.gameObject);
+            NextRoad.transform.position = NextPos;
 
-                Flag = true;
-            }
-       // }
+            
+        }
     }
 
     void OnTriggerExit(Collider col)

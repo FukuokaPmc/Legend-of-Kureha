@@ -55,6 +55,7 @@
      <Compile Include="Assets\Script\Scene_Manager.cs" />
      <Compile Include="Assets\Script\Scroll.cs" />
      <Compile Include="Assets\Script\StageGenerator.cs" />
+     <Compile Include="Assets\Script\StageGeneratorBox.cs" />
      <Compile Include="Assets\Script\State.cs" />
      <Compile Include="Assets\Script\StateMachine.cs" />
      <Compile Include="Assets\Script\StateSystem.cs" />
