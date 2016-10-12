@@ -17,7 +17,7 @@ public class Scroll : MonoBehaviour {
         if(lastPlPos <= player.position.z)
         {
             pos = player.position;
-            pos.z += -4;
+            pos.z += -6;
             this.transform.position = pos;
             lastPlPos = player.position.z;
         }

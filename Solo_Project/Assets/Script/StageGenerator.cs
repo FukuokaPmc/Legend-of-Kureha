@@ -9,7 +9,7 @@ public class StageGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Count = 0;
-        
+        Flag = false;
         //NextRoad.SetActive(false);
     }
 	
@@ -21,15 +21,18 @@ public class StageGenerator : MonoBehaviour {
     //void OnCollisionEnter(Collision collision)
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Player")
+        if (!Flag)
         {
-            Vector3 NextPos;
-            NextPos = this.transform.position;
-            NextPos.z += 100.0f;
-            NextRoad = Instantiate(this.gameObject);
-            NextRoad.transform.position = NextPos;
+            if (col.gameObject.tag == "Player")
+            {
+                Vector3 NextPos;
+                NextPos = this.transform.position;
+                NextPos.z += 100.0f;
+                NextRoad = Instantiate(this.gameObject);
+                NextRoad.transform.position = NextPos;
+                Flag = true;
 
-            
+            }
         }
     }
 
@@ -37,6 +40,7 @@ public class StageGenerator : MonoBehaviour {
     {
         if (col.gameObject.tag == "Player")
         {
+            if (col.transform.position.z >= this.transform.position.z + 20.0f)
             Destroy(this.gameObject);
         }
     }

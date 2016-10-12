@@ -8,6 +8,7 @@ public enum PlayerState
     Jump,
     Attack,
     Dash,
+    Refrect,
 }
 
 public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
@@ -21,9 +22,10 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
     private Transform Procamera; //演出用カメラ
     private Transform target; //ダッシュ用のターゲット
+    private Vector3 RefrectSize; //跳ねっ返りのサイズ
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         Speed = 5.0f;
         JumpSpeed = 7.0f;
         Gravity = 10.0f;
@@ -43,6 +45,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         stateList.Add(new stateJump(this));
         stateList.Add(new stateAttack(this));
         stateList.Add(new stateDash(this));
+        stateList.Add(new stateRefrect(this));
 
         stateMachine = new StateMachine<PlayerMove>();
 
@@ -317,15 +320,49 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             owner.transform.localEulerAngles = Vector3.zero;
             owner.anim.SetBool("Dash", false);
             owner.Procamera.GetComponent<Production>().EndProduction();
+            MoveSize.z *= -1;
+            owner.RefrectSize = MoveSize;
         }
 
+
+
         
+
+    }
+
+    private class stateRefrect : State<PlayerMove>
+    {
+        public stateRefrect(PlayerMove owner) : base(owner) { }
+        private int Count;
+        public override void Enter()
+        {
+            owner.RefrectSize *= 0.3f;
+            Count = 0;
+            Time.timeScale = 0.3f;
+        }
+
+        public override void Execute()
+        {
+            Count++;
+            owner.cont.Move(owner.RefrectSize * Time.deltaTime);
+
+            if(Count >= 30)
+                owner.ChangeState(PlayerState.Wait);
+        }
+
+        public override void Exit()
+        {
+            Time.timeScale = 1.0f;
+        }
 
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if(hit.gameObject.tag == "Enemy")
-            ChangeState(PlayerState.Wait);
+        {
+            ChangeState(PlayerState.Refrect);
+        }
+            
     }
 }

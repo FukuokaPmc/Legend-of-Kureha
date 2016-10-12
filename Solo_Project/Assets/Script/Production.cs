@@ -3,21 +3,25 @@ using System.Collections;
 
 public class Production : MonoBehaviour {
     public Vector3[] CameraPos;
+    private int ProNum;
 	// Use this for initialization
 	void Start () {
         this.gameObject.SetActive(false);
         this.transform.localPosition = CameraPos[0];
-	}
+        ProNum = 0;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    
 	}
 
     public void StartProduction(int nNum)
     {
         this.gameObject.SetActive(true);
         this.transform.localPosition = CameraPos[nNum];
+        ProNum = nNum;
     }
 
     public void EndProduction()
