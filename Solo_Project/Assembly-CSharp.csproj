@@ -60,6 +60,7 @@
      <Compile Include="Assets\Script\StateMachine.cs" />
      <Compile Include="Assets\Script\StateSystem.cs" />
      <Compile Include="Assets\Script\StrongEnemy.cs" />
+     <Compile Include="Assets\Script\Target.cs" />
      <Compile Include="Assets\Script\WeakEnemy.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

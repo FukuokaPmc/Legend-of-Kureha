@@ -22,6 +22,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
     private Transform Procamera; //演出用カメラ
     private Transform target; //ダッシュ用のターゲット
+    private GameObject Sight;
+    public bool bTarget;
     private Vector3 RefrectSize; //跳ねっ返りのサイズ
 
     // Use this for initialization
@@ -35,6 +37,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         Procamera = this.transform.GetChild(0);
         // Procamera.gameObject.SetActive(false);
         target = GameObject.Find("WeakEnemy").transform;
+        bTarget = false;
+        Sight = GameObject.FindGameObjectWithTag("Sight");
+        Sight.SetActive(false);
         Initialize();
     }
 
@@ -53,9 +58,11 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     }
 
     // Update is called once per frame
-    /*void Update () {
+    protected override void Update () {
+        if (Input.GetKeyDown(KeyCode.L))
+            LockOn();
         stateMachine.Update();
-    }*/
+    }
 
     //何もしていないとき
     private class stateWait : State<PlayerMove>
@@ -76,7 +83,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             if (Input.GetKey(KeyCode.LeftShift))
                 owner.ChangeState(PlayerState.Jump);
 
-            if(Input.GetMouseButton(0))
+            if(Input.GetKey(KeyCode.J))
                 owner.ChangeState(PlayerState.Attack);
 
             if(Input.GetKeyDown(KeyCode.Space))
@@ -298,14 +305,20 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             owner.anim.SetBool("Dash", true);
             owner.Procamera.GetComponent<Production>().StartProduction(0);
+            owner.Sight.GetComponent<Target>().CameraChange();
+            if (owner.bTarget)
+                MoveSize = (owner.target.position - StartPoint).normalized;
+            else
+                MoveSize = new Vector3(Mathf.Sin(owner.transform.eulerAngles.y * (Mathf.PI / 180.0f)), 0.0f, Mathf.Cos(owner.transform.eulerAngles.y * (Mathf.PI / 180.0f)));
 
-            MoveSize = (owner.target.position - StartPoint).normalized * MoveSpeed;
+            MoveSize *= MoveSpeed;
 
         }
 
         public override void Execute()
         {
-            owner.transform.LookAt(owner.target);
+            if(owner.bTarget)
+                owner.transform.LookAt(owner.target);
             //owner.transform.position = Vector3.Lerp(StartPoint,owner.target.position,Point);
             //Point += MoveSpeed;
             
@@ -320,6 +333,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             owner.transform.localEulerAngles = Vector3.zero;
             owner.anim.SetBool("Dash", false);
             owner.Procamera.GetComponent<Production>().EndProduction();
+            owner.Sight.GetComponent<Target>().CameraChange();
+            MoveSize.x *= -1;
+           // MoveSize.y *= -1;
             MoveSize.z *= -1;
             owner.RefrectSize = MoveSize;
         }
@@ -355,6 +371,37 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             Time.timeScale = 1.0f;
         }
 
+    }
+
+    //ロックオン
+    void LockOn()
+    {
+        float Distance;
+        float Near = 0;
+
+        if (!bTarget)
+        {
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))  //とりあえず敵のみ取得
+            {
+                Distance = Vector3.Distance(obj.transform.position, this.transform.position);
+
+                if (Near == 0 || Near > Distance)
+                {
+                    Near = Distance;
+                    target = obj.transform;
+                }
+            }
+
+            bTarget = true;
+            Sight.SetActive(true);
+            Sight.GetComponent<Target>().TargetLockOn(target);
+        }
+        else
+        {
+            bTarget = false;
+            Sight.SetActive(false);
+        }
+            
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
