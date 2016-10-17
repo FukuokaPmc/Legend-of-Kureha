@@ -23,13 +23,13 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private Transform Procamera; //演出用カメラ
     private Transform target; //ダッシュ用のターゲット
     private GameObject Sight;
-    public bool bTarget;
+    private bool bTarget;
     private Vector3 RefrectSize; //跳ねっ返りのサイズ
 
     // Use this for initialization
     void Start () {
-        Speed = 5.0f;
-        JumpSpeed = 7.0f;
+        Speed = 15.0f;
+        JumpSpeed = 10.0f;
         Gravity = 10.0f;
         cont = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
@@ -381,20 +381,25 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
         if (!bTarget)
         {
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))  //とりあえず敵のみ取得
+            GameObject[] enemy;
+            enemy = GameObject.FindGameObjectsWithTag("Enemy");
+            if (enemy.Length != 0)
             {
-                Distance = Vector3.Distance(obj.transform.position, this.transform.position);
-
-                if (Near == 0 || Near > Distance)
+                foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))  //とりあえず敵のみ取得
                 {
-                    Near = Distance;
-                    target = obj.transform;
-                }
-            }
+                    Distance = Vector3.Distance(obj.transform.position, this.transform.position);
 
-            bTarget = true;
-            Sight.SetActive(true);
-            Sight.GetComponent<Target>().TargetLockOn(target);
+                    if ((Near == 0 || Near > Distance) && (this.transform.position.z <= obj.transform.position.z))
+                    {
+                        Near = Distance;
+                        target = obj.transform;
+                    }
+                }
+
+                bTarget = true;
+                Sight.SetActive(true);
+                Sight.GetComponent<Target>().TargetLockOn(target);
+            }
         }
         else
         {
@@ -410,6 +415,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         {
             ChangeState(PlayerState.Refrect);
         }
+
+        
             
     }
 }

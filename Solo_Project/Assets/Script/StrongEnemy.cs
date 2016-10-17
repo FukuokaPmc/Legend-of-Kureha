@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StrongEnemy : MonoBehaviour {
+public class StrongEnemy : EnemyMove
+{
 
-	// Use this for initialization
-	void Start () {
-	
+    // Use this for initialization
+    public override void Start () {
+        
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+    // Update is called once per frame
+    public override void Update () {
+        EnemyCharge(0.5f);
 	}
 }
