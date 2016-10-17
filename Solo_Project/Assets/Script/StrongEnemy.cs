@@ -11,6 +11,9 @@ public class StrongEnemy : EnemyMove
 
     // Update is called once per frame
     public override void Update () {
-        EnemyCharge(0.5f);
+        if (bAwake || AwakeEnemy())
+        {
+            EnemyCharge(0.5f);
+        }
 	}
 }
