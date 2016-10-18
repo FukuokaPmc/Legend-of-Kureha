@@ -409,6 +409,12 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             
     }
 
+    public void SightOff()
+    {
+        bTarget = false;
+        Sight.SetActive(false);
+    }
+
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if(hit.gameObject.tag == "Enemy")
