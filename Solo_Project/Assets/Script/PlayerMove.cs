@@ -440,8 +440,6 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             }
             
         }
-
-        
             
     }
 }

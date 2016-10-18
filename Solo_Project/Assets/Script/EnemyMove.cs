@@ -3,7 +3,8 @@ using System.Collections;
 
 public class EnemyMove : MonoBehaviour {
     public Transform target;
-    protected CharacterController cont;
+    // protected CharacterController cont;
+    private Rigidbody rigid;
     protected bool bAwake;
     private float AwakeDistance; //どこまで近づいてきたら起動するか
     private float nCount;
@@ -15,7 +16,8 @@ public class EnemyMove : MonoBehaviour {
     protected float ShotDamage;   //弾のダメージ
     void Awake()
     {
-        cont = GetComponent<CharacterController>();
+        //cont = GetComponent<CharacterController>();
+        rigid = GetComponent<Rigidbody>();
         bAwake = false;
         AwakeDistance = 35.0f;
         nCount = 0;
@@ -49,11 +51,13 @@ public class EnemyMove : MonoBehaviour {
         {
             this.transform.LookAt(target);
             ChargeVector = (target.position - this.transform.position).normalized;
-            cont.Move(ChargeVector * fSpeed);
+            //cont.Move(ChargeVector * fSpeed);
+            rigid.velocity = (ChargeVector * fSpeed * 100.0f);
         }
         else
         {
-            cont.Move(ChargeVector * fSpeed);
+            //cont.Move(ChargeVector * fSpeed);
+            rigid.velocity = (ChargeVector * fSpeed * 100.0f);
         }
     }
 
