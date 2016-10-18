@@ -6,12 +6,18 @@ public class EnemyMove : MonoBehaviour {
     protected CharacterController cont;
     protected bool bAwake;
     private float AwakeDistance; //どこまで近づいてきたら起動するか
-	// Use this for initialization
-   void Awake()
+    private float nCount;
+    private Vector3 ChargeVector;
+    protected float ChargeTime;  //突進までのインターバル
+    protected float HormingTime; //追いかける時間
+                                // Use this for initialization
+    void Awake()
     {
         cont = GetComponent<CharacterController>();
         bAwake = false;
         AwakeDistance = 35.0f;
+        nCount = 0;
+        //ChargeTime = 1;
     }
 	public virtual void Start () {
 	
@@ -31,8 +37,22 @@ public class EnemyMove : MonoBehaviour {
     //敵の突進
     protected void EnemyCharge(float fSpeed)
     {
-        this.transform.LookAt(target);
-        cont.Move((target.position - this.transform.position).normalized * fSpeed);
+        nCount += 1.0f * Time.deltaTime;
+        if (nCount <= ChargeTime)
+        {
+            this.transform.LookAt(target);
+            ChargeVector = (target.position - this.transform.position).normalized;
+        }
+        else if (nCount <= ChargeTime + HormingTime)
+        {
+            this.transform.LookAt(target);
+            ChargeVector = (target.position - this.transform.position).normalized;
+            cont.Move(ChargeVector * fSpeed);
+        }
+        else
+        {
+            cont.Move(ChargeVector * fSpeed);
+        }
     }
 
     public void SetTarget(Transform Target)
