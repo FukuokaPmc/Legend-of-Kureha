@@ -21,9 +21,16 @@ public class HPGauge : MonoBehaviour {
             Gauge.fillAmount = HP;
         }
 
-        if(Minus.fillAmount > HP)
+        Gauge.fillAmount = HP;
+
+        if (Minus.fillAmount > HP)
         {
             Minus.fillAmount -= 0.003f;
         }
 	}
+
+    public void HPChange(float fHP)
+    {
+        HP = fHP;
+    }
 }

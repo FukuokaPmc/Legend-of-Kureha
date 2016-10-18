@@ -8,6 +8,7 @@ public class WeakEnemy : EnemyMove
 	public override void Start () {
         HormingTime = 0.5f;
         ChargeTime = 1.0f;
+        ChargeDamage = 20.0f;
     }
 
     // Update is called once per frame

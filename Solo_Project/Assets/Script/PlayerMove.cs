@@ -15,6 +15,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     public float Speed;
     public float JumpSpeed;
     public float Gravity;
+    private float HPMax; //最大HP
+    private float HPNow; //今のHP
+    private HPGauge gauge;
     private CharacterController cont;
     private Animator anim;
     private Vector3 MoveDir;
@@ -26,11 +29,16 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private bool bTarget;
     private Vector3 RefrectSize; //跳ねっ返りのサイズ
 
+
     // Use this for initialization
     void Start () {
         Speed = 15.0f;
         JumpSpeed = 10.0f;
         Gravity = 10.0f;
+        HPMax = 100.0f;
+        HPNow = HPMax;
+        gauge = GameObject.FindGameObjectWithTag("HPGauge").GetComponent<HPGauge>();
+
         cont = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         MoveDir = Vector3.zero;
@@ -419,7 +427,18 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     {
         if(hit.gameObject.tag == "Enemy")
         {
-            ChangeState(PlayerState.Refrect);
+            if(IsCurrentState(PlayerState.Dash))
+            {
+                ChangeState(PlayerState.Refrect);
+            }
+            else
+            {
+                Debug.Log("hoge");
+                Debug.Log(hit.gameObject.GetComponent<EnemyMove>().Damage(0));
+                HPNow -= hit.gameObject.GetComponent<EnemyMove>().Damage(0);
+                gauge.HPChange(HPNow / HPMax);
+            }
+            
         }
 
         

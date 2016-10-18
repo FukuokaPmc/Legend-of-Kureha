@@ -10,7 +10,9 @@ public class EnemyMove : MonoBehaviour {
     private Vector3 ChargeVector;
     protected float ChargeTime;  //突進までのインターバル
     protected float HormingTime; //追いかける時間
-                                // Use this for initialization
+                                 // Use this for initialization
+    protected float ChargeDamage; //突進のダメージ
+    protected float ShotDamage;   //弾のダメージ
     void Awake()
     {
         cont = GetComponent<CharacterController>();
@@ -70,6 +72,22 @@ public class EnemyMove : MonoBehaviour {
         else
         {
             return false;
+        }
+    }
+
+    public float Damage(int nNum)
+    {
+        if(nNum == 0)
+        {
+            return ChargeDamage;
+        }
+        else if(nNum == 1)
+        {
+            return ShotDamage;
+        }
+        else
+        {
+            return 0;
         }
     }
     
