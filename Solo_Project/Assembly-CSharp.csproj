@@ -51,6 +51,7 @@
      <Compile Include="Assets\Script\EnemyGanerator.cs" />
      <Compile Include="Assets\Script\EnemyMove.cs" />
      <Compile Include="Assets\Script\Fader.cs" />
+     <Compile Include="Assets\Script\HPGauge.cs" />
      <Compile Include="Assets\Script\NormalEnemy.cs" />
      <Compile Include="Assets\Script\PlayerMove.cs" />
      <Compile Include="Assets\Script\Production.cs" />
