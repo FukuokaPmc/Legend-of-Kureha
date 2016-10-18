@@ -36,7 +36,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         MoveDir = Vector3.zero;
         Procamera = this.transform.GetChild(0);
         // Procamera.gameObject.SetActive(false);
-        target = GameObject.Find("WeakEnemy").transform;
+        target = null;
         bTarget = false;
         Sight = GameObject.FindGameObjectWithTag("Sight");
         Sight.SetActive(false);

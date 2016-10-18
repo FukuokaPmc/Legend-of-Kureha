@@ -35,7 +35,7 @@ public class EnemyMove : MonoBehaviour {
         cont.Move((target.position - this.transform.position).normalized * fSpeed);
     }
 
-    void SetTarget(Transform Target)
+    public void SetTarget(Transform Target)
     {
         target = Target;
     }
