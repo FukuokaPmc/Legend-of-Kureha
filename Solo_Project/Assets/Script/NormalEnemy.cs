@@ -15,6 +15,7 @@ public class NormalEnemy : EnemyMove
         if (bAwake || AwakeEnemy())
         {
             EnemyCharge(0.5f);
+            EnemyStun();
         }
 	}
 }

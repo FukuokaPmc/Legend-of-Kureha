@@ -63,6 +63,7 @@
      <Compile Include="Assets\Script\StateSystem.cs" />
      <Compile Include="Assets\Script\StrongEnemy.cs" />
      <Compile Include="Assets\Script\Target.cs" />
+     <Compile Include="Assets\Script\Trail.cs" />
      <Compile Include="Assets\Script\WeakEnemy.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />

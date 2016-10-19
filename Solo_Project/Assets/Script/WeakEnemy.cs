@@ -16,6 +16,7 @@ public class WeakEnemy : EnemyMove
         if (bAwake || AwakeEnemy())
         {
             EnemyCharge(0.3f);
+            EnemyStun();
         }
 	}
 }

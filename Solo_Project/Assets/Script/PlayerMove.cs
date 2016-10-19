@@ -34,6 +34,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private bool InvaridFlag;
     private float InvaridCount;
 
+    private GameObject Trail;
 
     private KeyCode Dash;
     // Use this for initialization
@@ -59,6 +60,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         InvaridCount = 0.0f;
 
         Dash = KeyCode.Space;
+
+        Trail = transform.GetChild(3).gameObject;
+        Trail.SetActive(false);
 
         Initialize();
     }
@@ -161,7 +165,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             if (end)
                 owner.ChangeState(PlayerState.Wait);
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetKey(KeyCode.J))
                 owner.ChangeState(PlayerState.Attack);
 
             if (Input.GetKeyDown(owner.Dash))
@@ -216,7 +220,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             else if (owner.cont.isGrounded)
                 owner.ChangeState(PlayerState.Wait);
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetKey(KeyCode.J))
                 owner.ChangeState(PlayerState.Attack);
 
             if (Input.GetKeyDown(owner.Dash))
@@ -336,6 +340,12 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
         public override void Execute()
         {
+            if (owner.bTarget)
+            {
+                owner.transform.LookAt(owner.target);
+                if(owner.cont.isGrounded)
+                    owner.transform.eulerAngles = new Vector3(0.0f,owner.transform.eulerAngles.y, owner.transform.eulerAngles.z);
+            }
             if (owner.anim.GetBool("AttackEnd"))
                 owner.ChangeState(PlayerState.Wait);
         }
@@ -448,6 +458,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         {
             Count = 0;
             StepVelo = 10.0f;
+            owner.Trail.SetActive(true);
+            owner.Trail.GetComponent<Trail>().TimerStop();
         }
 
         public override void Execute()
@@ -461,7 +473,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
         public override void Exit()
         {
-
+            owner.Trail.GetComponent<Trail>().EraseTimer();
         }
     }
 
@@ -514,6 +526,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             if(IsCurrentState(PlayerState.Dash))
             {
                 ChangeState(PlayerState.Refrect);
+                hit.gameObject.GetComponent<EnemyMove>().Stun();
             }    
         }
             

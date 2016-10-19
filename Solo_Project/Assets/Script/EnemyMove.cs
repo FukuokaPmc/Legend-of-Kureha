@@ -14,6 +14,10 @@ public class EnemyMove : MonoBehaviour {
                                  // Use this for initialization
     protected float ChargeDamage; //突進のダメージ
     protected float ShotDamage;   //弾のダメージ
+
+    private bool bStun; //突進が当たった場合のひるみ発生フラグ
+    protected float StunTime; //ひるみ時間
+
     void Awake()
     {
         cont = GetComponent<CharacterController>();
@@ -21,6 +25,8 @@ public class EnemyMove : MonoBehaviour {
         bAwake = false;
         AwakeDistance = 35.0f;
         nCount = 0;
+        bStun = false;
+        StunTime = 1.0f;
         //ChargeTime = 1;
     }
 	public virtual void Start () {
@@ -41,23 +47,42 @@ public class EnemyMove : MonoBehaviour {
     //敵の突進
     protected void EnemyCharge(float fSpeed)
     {
-        nCount += 1.0f * Time.deltaTime;
-        if (nCount <= ChargeTime)
+        if (!bStun)
         {
-            this.transform.LookAt(target);
-            ChargeVector = (target.position - this.transform.position).normalized;
+            nCount += 1.0f * Time.deltaTime;
+            if (nCount <= ChargeTime)
+            {
+                this.transform.LookAt(target);
+                ChargeVector = (target.position - this.transform.position).normalized;
+            }
+            else if (nCount <= ChargeTime + HormingTime)
+            {
+                this.transform.LookAt(target);
+                ChargeVector = (target.position - this.transform.position).normalized;
+                cont.Move(ChargeVector * fSpeed);
+                //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+            }
+            else
+            {
+                cont.Move(ChargeVector * fSpeed);
+                //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+            }
         }
-        else if (nCount <= ChargeTime + HormingTime)
+    }
+
+    protected void EnemyStun()
+    {
+        if (bStun)
         {
-            this.transform.LookAt(target);
-            ChargeVector = (target.position - this.transform.position).normalized;
-            cont.Move(ChargeVector * fSpeed);
-            //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
-        }
-        else
-        {
-            cont.Move(ChargeVector * fSpeed);
-            //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+            nCount += 1.0f * Time.deltaTime;
+
+            transform.Rotate(new Vector3(10.0f, 0.0f, 0.0f));
+
+            if (nCount >= StunTime)
+            {
+                bStun = false;
+                nCount = 0;
+            }
         }
     }
 
@@ -95,6 +120,13 @@ public class EnemyMove : MonoBehaviour {
         }
     }
 
+    public void Stun()
+    {
+        Debug.Log("hogehoge");
+        bStun = true;
+        nCount = 0;
+    }
+
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.tag == "Player")
@@ -102,9 +134,13 @@ public class EnemyMove : MonoBehaviour {
             PlayerMove player = hit.gameObject.GetComponent<PlayerMove>();
             if (!player.IsCurrentState(PlayerState.Dash))
             {
-                Debug.Log("hogehoge");
+                
                 Debug.Log(Damage(0));
                 player.HPMinus(Damage(0));
+            }
+            else
+            {
+                
             }
 
         }
