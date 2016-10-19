@@ -37,6 +37,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private GameObject Trail;
 
     private KeyCode Dash;
+    private KeyCode Attack;
+    private KeyCode Lockon;
+    private KeyCode Jump;
     // Use this for initialization
     void Start () {
         Speed = 15.0f;
@@ -59,10 +62,13 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         InvaridFlag = false;
         InvaridCount = 0.0f;
 
-        Dash = KeyCode.Space;
-
         Trail = transform.GetChild(3).gameObject;
         Trail.SetActive(false);
+
+        Dash = KeyCode.K;
+        Attack = KeyCode.J;
+        Jump = KeyCode.M;
+        Lockon = KeyCode.L;
 
         Initialize();
     }
@@ -95,7 +101,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 cont.enabled = true;
             }
         }
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(Lockon))
             LockOn();
         stateMachine.Update();
     }
@@ -116,10 +122,10 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
                 owner.ChangeState(PlayerState.Move);
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(owner.Jump))
                 owner.ChangeState(PlayerState.Jump);
 
-            if(Input.GetKey(KeyCode.J))
+            if(Input.GetKey(owner.Attack))
                 owner.ChangeState(PlayerState.Attack);
 
             if(Input.GetKeyDown(owner.Dash))
@@ -159,13 +165,13 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         {
             end = owner.Move();
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(owner.Jump))
                 owner.ChangeState(PlayerState.Jump);
 
             if (end)
                 owner.ChangeState(PlayerState.Wait);
 
-            if (Input.GetKey(KeyCode.J))
+            if (Input.GetKey(owner.Attack))
                 owner.ChangeState(PlayerState.Attack);
 
             if (Input.GetKeyDown(owner.Dash))
@@ -220,7 +226,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             else if (owner.cont.isGrounded)
                 owner.ChangeState(PlayerState.Wait);
 
-            if (Input.GetKey(KeyCode.J))
+            if (Input.GetKey(owner.Attack))
                 owner.ChangeState(PlayerState.Attack);
 
             if (Input.GetKeyDown(owner.Dash))
@@ -400,7 +406,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             
             owner.cont.Move(MoveSize * Time.deltaTime);
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(owner.Dash))
                 owner.ChangeState(PlayerState.Wait);
         }
 
