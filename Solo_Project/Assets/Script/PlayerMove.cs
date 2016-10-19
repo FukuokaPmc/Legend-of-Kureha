@@ -29,6 +29,10 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private bool bTarget;
     private Vector3 RefrectSize; //跳ねっ返りのサイズ
 
+    private float InvaridTime;
+    private bool InvaridFlag;
+    private float InvaridCount;
+
 
     // Use this for initialization
     void Start () {
@@ -48,6 +52,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         bTarget = false;
         Sight = GameObject.FindGameObjectWithTag("Sight");
         Sight.SetActive(false);
+        InvaridTime = 1.0f;
+        InvaridFlag = false;
+        InvaridCount = 0.0f;
         Initialize();
     }
 
@@ -67,6 +74,17 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
     // Update is called once per frame
     protected override void Update () {
+        if(InvaridFlag)
+        {
+            InvaridCount += 1.0f * Time.deltaTime;
+
+            if(InvaridCount >= 1.0f)
+            {
+                InvaridFlag = false;
+                InvaridCount = 0;
+                cont.enabled = true;
+            }
+        }
         if (Input.GetKeyDown(KeyCode.L))
             LockOn();
         stateMachine.Update();
@@ -439,6 +457,13 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     {
         HPNow -= fDamage;
         gauge.HPChange(HPNow / HPMax);
+        Invarid();
+    }
+
+    private void  Invarid()
+    {
+        InvaridFlag = true;
+        cont.enabled = false;
     }
 
 }
