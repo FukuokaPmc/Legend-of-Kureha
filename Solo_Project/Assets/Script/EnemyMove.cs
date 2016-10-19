@@ -18,6 +18,9 @@ public class EnemyMove : MonoBehaviour {
     private bool bStun; //突進が当たった場合のひるみ発生フラグ
     protected float StunTime; //ひるみ時間
 
+    protected GameObject Shot;
+    protected float HomingTime; //誘導する時間
+
     void Awake()
     {
         cont = GetComponent<CharacterController>();
@@ -34,14 +37,22 @@ public class EnemyMove : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
+
 	public virtual void Update () {
 	
 	}
 
     //敵の弾
-    protected void EnemyShot(int nMaxShot)
+    protected void EnemyShot()
     {
-
+        if (!bStun)
+        {
+             nCount += 1.0f * Time.deltaTime;
+             if (true)
+             {
+                 Shot.transform.LookAt(target);
+             }
+        }
     }
 
     //敵の突進
@@ -49,24 +60,28 @@ public class EnemyMove : MonoBehaviour {
     {
         if (!bStun)
         {
-            nCount += 1.0f * Time.deltaTime;
-            if (nCount <= ChargeTime)
-            {
-                this.transform.LookAt(target);
-                ChargeVector = (target.position - this.transform.position).normalized;
-            }
-            else if (nCount <= ChargeTime + HormingTime)
-            {
-                this.transform.LookAt(target);
-                ChargeVector = (target.position - this.transform.position).normalized;
-                cont.Move(ChargeVector * fSpeed);
-                //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
-            }
-            else
-            {
-                cont.Move(ChargeVector * fSpeed);
-                //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
-            }
+            /* nCount += 1.0f * Time.deltaTime;
+             if (nCount <= ChargeTime)
+             {
+                 this.transform.LookAt(target);
+                 ChargeVector = (target.position - this.transform.position).normalized;
+             }
+             else if (nCount <= ChargeTime + HormingTime)
+             {
+                 this.transform.LookAt(target);
+                 ChargeVector = (target.position - this.transform.position).normalized;
+                 cont.Move(ChargeVector * fSpeed);
+                 //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+             }
+             else
+             {
+                 cont.Move(ChargeVector * fSpeed);
+                 //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+             }*/
+
+            this.transform.LookAt(target);
+            ChargeVector = (target.position - this.transform.position).normalized;
+            cont.Move(ChargeVector * fSpeed);
         }
     }
 

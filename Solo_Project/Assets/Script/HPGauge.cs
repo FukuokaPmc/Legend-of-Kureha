@@ -17,7 +17,7 @@ public class HPGauge : MonoBehaviour {
 	void Update () {
 	    if(Input.GetKeyDown(KeyCode.V))
         {
-            HP -= 0.1f;
+            HP -= 0.05f;
             Gauge.fillAmount = HP;
         }
 

@@ -395,6 +395,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             MoveSize *= MoveSpeed;
 
+            
+
         }
 
         public override void Execute()
@@ -420,6 +422,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
            // MoveSize.y *= -1;
             MoveSize.z *= -1;
             owner.RefrectSize = MoveSize;
+
+            
         }
 
 

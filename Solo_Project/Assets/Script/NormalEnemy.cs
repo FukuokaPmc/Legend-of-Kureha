@@ -3,7 +3,6 @@ using System.Collections;
 
 public class NormalEnemy : EnemyMove
 {
-
     // Use this for initialization
     public override void Start () {
         HormingTime = 0.3f;
