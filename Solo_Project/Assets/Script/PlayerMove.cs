@@ -9,6 +9,7 @@ public enum PlayerState
     Attack,
     Dash,
     Refrect,
+    Step,
 }
 
 public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
@@ -34,6 +35,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private float InvaridCount;
 
 
+    private KeyCode Dash;
     // Use this for initialization
     void Start () {
         Speed = 15.0f;
@@ -55,6 +57,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         InvaridTime = 1.0f;
         InvaridFlag = false;
         InvaridCount = 0.0f;
+
+        Dash = KeyCode.Space;
+
         Initialize();
     }
 
@@ -66,6 +71,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         stateList.Add(new stateAttack(this));
         stateList.Add(new stateDash(this));
         stateList.Add(new stateRefrect(this));
+        stateList.Add(new stateStep(this));
 
         stateMachine = new StateMachine<PlayerMove>();
 
@@ -112,8 +118,18 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             if(Input.GetKey(KeyCode.J))
                 owner.ChangeState(PlayerState.Attack);
 
-            if(Input.GetKeyDown(KeyCode.Space))
-                owner.ChangeState(PlayerState.Dash);
+            if(Input.GetKeyDown(owner.Dash))
+            {
+                if (owner.bTarget)
+                {
+                    owner.ChangeState(PlayerState.Dash);
+                }
+                else
+                {
+                    owner.ChangeState(PlayerState.Step);
+                }
+            }
+                
         }
 
         public override void Exit()
@@ -147,6 +163,18 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if (Input.GetMouseButton(0))
                 owner.ChangeState(PlayerState.Attack);
+
+            if (Input.GetKeyDown(owner.Dash))
+            {
+                if (owner.bTarget)
+                {
+                    owner.ChangeState(PlayerState.Dash);
+                }
+                else
+                {
+                    owner.ChangeState(PlayerState.Step);
+                }
+            }
 
         }
 
@@ -190,6 +218,18 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if (Input.GetMouseButton(0))
                 owner.ChangeState(PlayerState.Attack);
+
+            if (Input.GetKeyDown(owner.Dash))
+            {
+                if (owner.bTarget)
+                {
+                    owner.ChangeState(PlayerState.Dash);
+                }
+                else
+                {
+                    owner.ChangeState(PlayerState.Step);
+                }
+            }
         }
 
         public override void Exit()
@@ -397,6 +437,32 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             Time.timeScale = 1.0f;
         }
 
+    }
+
+    private class stateStep : State<PlayerMove>
+    {
+        public stateStep(PlayerMove owner) : base(owner) { }
+        private float Count;
+        private float StepVelo;
+        public override void Enter()
+        {
+            Count = 0;
+            StepVelo = 10.0f;
+        }
+
+        public override void Execute()
+        {
+            Count += 1.0f * Time.deltaTime;
+            owner.cont.Move(owner.MoveDir * StepVelo * Time.deltaTime);
+
+            if (Count >= 0.1f)
+                owner.ChangeState(PlayerState.Wait);
+        }
+
+        public override void Exit()
+        {
+
+        }
     }
 
     //ロックオン
