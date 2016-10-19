@@ -430,16 +430,15 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             if(IsCurrentState(PlayerState.Dash))
             {
                 ChangeState(PlayerState.Refrect);
-            }
-            else
-            {
-                Debug.Log("hoge");
-                Debug.Log(hit.gameObject.GetComponent<EnemyMove>().Damage(0));
-                HPNow -= hit.gameObject.GetComponent<EnemyMove>().Damage(0);
-                gauge.HPChange(HPNow / HPMax);
-            }
-            
+            }    
         }
             
     }
+
+    public void HPMinus(float fDamage)
+    {
+        HPNow -= fDamage;
+        gauge.HPChange(HPNow / HPMax);
+    }
+
 }

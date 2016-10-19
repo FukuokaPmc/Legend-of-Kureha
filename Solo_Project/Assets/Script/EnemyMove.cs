@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EnemyMove : MonoBehaviour {
     public Transform target;
-    // protected CharacterController cont;
+    protected CharacterController cont;
     private Rigidbody rigid;
     protected bool bAwake;
     private float AwakeDistance; //どこまで近づいてきたら起動するか
@@ -16,8 +16,8 @@ public class EnemyMove : MonoBehaviour {
     protected float ShotDamage;   //弾のダメージ
     void Awake()
     {
-        //cont = GetComponent<CharacterController>();
-        rigid = GetComponent<Rigidbody>();
+        cont = GetComponent<CharacterController>();
+        //rigid = GetComponent<Rigidbody>();
         bAwake = false;
         AwakeDistance = 35.0f;
         nCount = 0;
@@ -51,13 +51,13 @@ public class EnemyMove : MonoBehaviour {
         {
             this.transform.LookAt(target);
             ChargeVector = (target.position - this.transform.position).normalized;
-            //cont.Move(ChargeVector * fSpeed);
-            rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+            cont.Move(ChargeVector * fSpeed);
+            //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
         }
         else
         {
-            //cont.Move(ChargeVector * fSpeed);
-            rigid.velocity = (ChargeVector * fSpeed * 100.0f);
+            cont.Move(ChargeVector * fSpeed);
+            //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
         }
     }
 
@@ -94,5 +94,21 @@ public class EnemyMove : MonoBehaviour {
             return 0;
         }
     }
-    
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.tag == "Player")
+        {
+            PlayerMove player = hit.gameObject.GetComponent<PlayerMove>();
+            if (!player.IsCurrentState(PlayerState.Dash))
+            {
+                Debug.Log("hogehoge");
+                Debug.Log(Damage(0));
+                player.HPMinus(Damage(0));
+            }
+
+        }
+
+    }
+
 }
