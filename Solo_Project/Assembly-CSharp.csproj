@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Daemon_BloodyQueen\script\characterRotate.cs" />
      <Compile Include="Assets\Script\AttackCheck.cs" />
      <Compile Include="Assets\Script\CameraMove.cs" />
      <Compile Include="Assets\Script\Check.cs" />
@@ -54,6 +55,7 @@
      <Compile Include="Assets\Script\Fader.cs" />
      <Compile Include="Assets\Script\HPGauge.cs" />
      <Compile Include="Assets\Script\NormalEnemy.cs" />
+     <Compile Include="Assets\Script\PhaseSystem.cs" />
      <Compile Include="Assets\Script\PlayerMove.cs" />
      <Compile Include="Assets\Script\Production.cs" />
      <Compile Include="Assets\Script\Scene_Manager.cs" />
