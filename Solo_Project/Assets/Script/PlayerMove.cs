@@ -255,79 +255,119 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         float InpY = 0f;
         bool bX = false;
         bool bY = false;
-        if (Input.GetKey(KeyCode.A))
+        if (!PhaseSystem.Boss)
         {
-            InpX = -1f;
-            bX = true;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            InpX = 1f;
-            bX = true;
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            InpY = 1f;
-            bY = true;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            InpY = -1f;
-            bY = true;
-        }
-        if (bX && bY)
-        {
-            InpX /= 2;
-            InpY /= 2;
-        }
+            if (Input.GetKey(KeyCode.A))
+            {
+                InpX = -1f;
+                bX = true;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                InpX = 1f;
+                bX = true;
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                InpY = 1f;
+                bY = true;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                InpY = -1f;
+                bY = true;
+            }
+            if (bX && bY)
+            {
+                InpX /= 2;
+                InpY /= 2;
+            }
 
-        if (bX && bY)
-        {
-            if (InpX >= 0)
+            if (bX && bY)
+            {
+                if (InpX >= 0)
+                {
+                    if (InpY <= 0)
+                        this.transform.eulerAngles = new Vector3(0, 135, 0);
+                    else
+                        this.transform.eulerAngles = new Vector3(0, 45, 0);
+                }
+                else
+                {
+                    if (InpY <= 0)
+                        this.transform.eulerAngles = new Vector3(0, -135, 0);
+                    else
+                        this.transform.eulerAngles = new Vector3(0, -45, 0);
+                }
+            }
+            else if (bX)
+            {
+                if (InpX >= 0)
+                    this.transform.eulerAngles = new Vector3(0, 90, 0);
+                else
+                    this.transform.eulerAngles = new Vector3(0, -90, 0);
+            }
+            else if (bY)
             {
                 if (InpY <= 0)
-                    this.transform.eulerAngles = new Vector3(0, 135, 0);
+                    this.transform.eulerAngles = new Vector3(0, 180, 0);
                 else
-                    this.transform.eulerAngles = new Vector3(0, 45, 0);
+                    this.transform.eulerAngles = new Vector3(0, 0, 0);
             }
-            else
+
+
+
+
+            MoveDir = new Vector3(Mathf.Sin(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)), 0.0f, Mathf.Cos(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)));
+            MoveDir.y -= Gravity * Time.deltaTime;
+            MoveDir *= Speed;
+
+            if (bX || bY)
             {
-                if (InpY <= 0)
-                    this.transform.eulerAngles = new Vector3(0, -135, 0);
-                else
-                    this.transform.eulerAngles = new Vector3(0, -45, 0);
+                cont.Move(MoveDir * Time.deltaTime);
             }
-        }
-        else if (bX)
-        {
-            if (InpX >= 0)
-                this.transform.eulerAngles = new Vector3(0, 90, 0);
-            else
-                this.transform.eulerAngles = new Vector3(0, -90, 0);
-        }
-        else if (bY)
-        {
-            if (InpY <= 0)
-                this.transform.eulerAngles = new Vector3(0, 180, 0);
-            else
-                this.transform.eulerAngles = new Vector3(0, 0, 0);
-        }
 
-        
-        
-
-        MoveDir = new Vector3(Mathf.Sin(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)), 0.0f, Mathf.Cos(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)));
-        MoveDir.y -= Gravity * Time.deltaTime;
-        MoveDir *= Speed;
-
-        if (bX || bY)
-        {
-            cont.Move(MoveDir * Time.deltaTime);
+            if ((!bX) && (!bY))
+                return true;
+            return false;
         }
-        
-        if ((!bX) && (!bY))
-            return true;
-        return false;
+        else
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                InpX = -1f;
+                bX = true;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                InpX = 1f;
+                bX = true;
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+               // transform.LookAt(Camera.main.transform.forward);
+                bY = true;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+               // transform.LookAt(-Camera.main.transform.forward);
+                InpY = -1f;
+                bY = true;
+            }
+
+            MoveDir = new Vector3(Mathf.Sin(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)), 0.0f, Mathf.Cos(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)));
+            MoveDir.y -= Gravity * Time.deltaTime;
+            MoveDir *= Speed;
+
+            if (bX || bY)
+            {
+                cont.Move(MoveDir * Time.deltaTime);
+            }
+  
+            if ((!bX) && (!bY))
+                return true;
+            return false;
+        }
     }
 
     private class stateAttack : State<PlayerMove>
