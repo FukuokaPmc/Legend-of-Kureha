@@ -51,7 +51,8 @@ public class EnemyMove : MonoBehaviour {
              if (true)
              {
                  Shot.transform.LookAt(target);
-             }
+                Shot.transform.eulerAngles = new Vector3(0.0f, Shot.transform.eulerAngles.y, Shot.transform.eulerAngles.z);
+            }
         }
     }
 

@@ -46,7 +46,7 @@ public class StageGenerator : MonoBehaviour {
                     BossStage = Instantiate(BossStage);
                     BossStage.transform.position = NextPos;
                     BossModel = Instantiate(BossModel);
-                    BossModel.transform.position = BossStage.transform.position;
+                    BossModel.transform.position = new Vector3(BossStage.transform.position.x, BossStage.transform.position.y + 1.0f, BossStage.transform.position.z);
                     StageCount++;
                 }
 
