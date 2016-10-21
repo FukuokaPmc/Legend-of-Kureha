@@ -35,8 +35,16 @@ public class Scene_Manager : MonoBehaviour {
                     SceneManager.LoadScene("end");
                 if (scene.name == "end")
                     SceneManager.LoadScene("title");
+                if (scene.name == "BossTest")
+                    SceneManager.LoadScene("end");
             }
                 
         }
 	}
+
+    public void SceneChange()
+    {
+        nTimer = fade.GetComponent<Fader>().Ignite(0.03f);
+        bStart = true;
+    }
 }

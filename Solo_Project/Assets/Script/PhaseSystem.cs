@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PhaseSystem : MonoBehaviour {
-    private bool Boss; //trueでボス戦
+    public static bool Boss; //trueでボス戦
 	// Use this for initialization
 	void Start () {
         Boss = false;
@@ -11,8 +11,11 @@ public class PhaseSystem : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
-	}
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            Boss = true;
+        }
+    }
 
     public void BossStage()
     {
@@ -21,5 +24,8 @@ public class PhaseSystem : MonoBehaviour {
         {
             Destroy(obj.gameObject);
         }
+
+        
     }
+
 }
