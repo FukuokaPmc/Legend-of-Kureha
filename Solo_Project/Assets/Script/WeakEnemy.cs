@@ -11,6 +11,7 @@ public class WeakEnemy : EnemyMove
         ChargeDamage = 20.0f;
         Shot = Instantiate(ShotModel);
         Shot.transform.SetParent(this.transform);
+        Shot.transform.localScale = Vector3.one;
         Shot.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 3.0f);
     }
 

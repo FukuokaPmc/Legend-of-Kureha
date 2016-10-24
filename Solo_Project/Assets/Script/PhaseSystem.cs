@@ -20,6 +20,8 @@ public class PhaseSystem : MonoBehaviour {
     public void BossStage()
     {
         Boss = true;
+        //Camera.main.GetComponent<CameraMove>().SetBoss();
+        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMove>().SetBoss();
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Stage"))
         {
             Destroy(obj.gameObject);
