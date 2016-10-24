@@ -22,6 +22,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private CharacterController cont;
     private Animator anim;
     private Vector3 MoveDir;
+    private Vector3 PrevPos;
     public GameObject AttackBox;
 
     private Transform Procamera; //演出用カメラ
@@ -333,19 +334,23 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         }
         else
         {
+            Vector3 PlayerPos;
             if (Input.GetKey(KeyCode.A))
             {
                 InpX = -1f;
+               // transform.RotateAround(Vector3.zero, Vector3.up, 20 * Time.deltaTime);
                 bX = true;
             }
             if (Input.GetKey(KeyCode.D))
             {
                 InpX = 1f;
+               // transform.RotateAround(Vector3.zero, Vector3.up, -20 * Time.deltaTime);
                 bX = true;
             }
             if (Input.GetKey(KeyCode.W))
             {
-               // transform.LookAt(Camera.main.transform.forward);
+                // transform.LookAt(Camera.main.transform.forward);
+                InpY = 1.0f;
                 bY = true;
             }
             if (Input.GetKey(KeyCode.S))
@@ -355,15 +360,22 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 bY = true;
             }
 
-            MoveDir = new Vector3(Mathf.Sin(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)), 0.0f, Mathf.Cos(this.transform.eulerAngles.y * (Mathf.PI / 180.0f)));
+            MoveDir = InpX * Camera.main.transform.TransformDirection(Vector3.right) + InpY * Camera.main.transform.TransformDirection(Vector3.forward);
+            MoveDir.y = 0f;
+            PlayerPos = MoveDir;
             MoveDir.y -= Gravity * Time.deltaTime;
             MoveDir *= Speed;
+
+            
 
             if (bX || bY)
             {
                 cont.Move(MoveDir * Time.deltaTime);
+                transform.rotation = Quaternion.LookRotation(PlayerPos);
             }
-  
+
+            PrevPos = new Vector3(this.transform.position.x, 0, this.transform.position.z);
+
             if ((!bX) && (!bY))
                 return true;
             return false;
