@@ -82,6 +82,7 @@ public class BossMove : StateSystem<BossMove, BossState>
         {
             owner.anime.CrossFade("Levitate");
             bStart = false;
+            PhaseSystem.BossProduct = true;
         }
 
         public override void Execute()
@@ -105,7 +106,7 @@ public class BossMove : StateSystem<BossMove, BossState>
 
         public override void Exit()
         {
-
+            PhaseSystem.BossProduct = false;
         }
     }
 

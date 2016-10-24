@@ -3,10 +3,11 @@ using System.Collections;
 
 public class PhaseSystem : MonoBehaviour {
     public static bool Boss; //trueでボス戦
+    public static bool BossProduct; //ボスの登場演出が終わったかどうか
 	// Use this for initialization
 	void Start () {
         Boss = false;
-
+        BossProduct = false;
     }
 	
 	// Update is called once per frame
@@ -27,7 +28,6 @@ public class PhaseSystem : MonoBehaviour {
             Destroy(obj.gameObject);
         }
 
-        
     }
 
 }

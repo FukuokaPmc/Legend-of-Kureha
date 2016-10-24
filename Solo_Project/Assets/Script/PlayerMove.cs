@@ -102,9 +102,12 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 cont.enabled = true;
             }
         }
-        if (Input.GetKeyDown(Lockon))
+        if (Input.GetKeyDown(Lockon) && !PhaseSystem.BossProduct)
             LockOn();
-        stateMachine.Update();
+        if(!PhaseSystem.BossProduct)
+            stateMachine.Update();
+        else if(!IsCurrentState(PlayerState.Wait))
+            ChangeState(PlayerState.Wait);
     }
 
     //何もしていないとき
@@ -120,27 +123,26 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         public override void Execute()
         {
             owner.cont.Move(new Vector3(0,-owner.Gravity * Time.deltaTime,0));
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-                owner.ChangeState(PlayerState.Move);
+                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+                    owner.ChangeState(PlayerState.Move);
 
-            if (Input.GetKey(owner.Jump))
-                owner.ChangeState(PlayerState.Jump);
+                if (Input.GetKey(owner.Jump))
+                    owner.ChangeState(PlayerState.Jump);
 
-            if(Input.GetKey(owner.Attack))
-                owner.ChangeState(PlayerState.Attack);
+                if (Input.GetKey(owner.Attack))
+                    owner.ChangeState(PlayerState.Attack);
 
-            if(Input.GetKeyDown(owner.Dash))
-            {
-                if (owner.bTarget)
+                if (Input.GetKeyDown(owner.Dash))
                 {
-                    owner.ChangeState(PlayerState.Dash);
+                    if (owner.bTarget)
+                    {
+                        owner.ChangeState(PlayerState.Dash);
+                    }
+                    else
+                    {
+                        owner.ChangeState(PlayerState.Step);
+                    }
                 }
-                else
-                {
-                    owner.ChangeState(PlayerState.Step);
-                }
-            }
-                
         }
 
         public override void Exit()
@@ -332,7 +334,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 return true;
             return false;
         }
-        else
+        else if(!PhaseSystem.BossProduct)
         {
             Vector3 PlayerPos;
             if (Input.GetKey(KeyCode.A))
@@ -378,6 +380,10 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if ((!bX) && (!bY))
                 return true;
+            return false;
+        }
+        else
+        {
             return false;
         }
     }
@@ -566,6 +572,15 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 Sight.SetActive(true);
                 Sight.GetComponent<Target>().TargetLockOn(target);
             }
+
+            if(PhaseSystem.Boss)
+            {
+                target = GameObject.FindGameObjectWithTag("Boss").transform;
+
+                bTarget = true;
+                Sight.SetActive(true);
+                Sight.GetComponent<Target>().TargetLockOn(target);
+            }
         }
         else
         {
@@ -591,7 +606,14 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 hit.gameObject.GetComponent<EnemyMove>().Stun();
             }    
         }
-            
+        if (hit.gameObject.tag == "Boss")
+        {
+            if (IsCurrentState(PlayerState.Dash))
+            {
+                ChangeState(PlayerState.Refrect);
+            }
+        }
+
     }
 
     public void HPMinus(float fDamage)
