@@ -18,6 +18,7 @@ public class BossMove : StateSystem<BossMove, BossState>
     private PhaseSystem phase;
     private GameObject Player;
     private BossParts parts;
+    private GameObject Barrier;
     // Use this for initialization
     void Start()
     {
@@ -26,7 +27,8 @@ public class BossMove : StateSystem<BossMove, BossState>
         //phase = GameObject.Find("PhaseSystem").GetComponent<PhaseSystem>();
         Player = GameObject.FindGameObjectWithTag("Player");
         parts = GameObject.FindGameObjectWithTag("BossParts").GetComponent<BossParts>();
-
+        Barrier = GameObject.Find("Barrier");
+        Barrier.SetActive(false);
         bAwake = false;
 
         Initialize();
@@ -49,6 +51,14 @@ public class BossMove : StateSystem<BossMove, BossState>
     // Update is called once per frame
     protected override void Update()
     {
+        if(AuroraLast())
+        {
+            Barrier.GetComponent<ParticleSystem>().Stop();
+            if(!Barrier.GetComponent<ParticleSystem>().isPlaying)
+            {
+                Barrier.SetActive(false);
+            }
+        }
         stateMachine.Update();
     }
 
@@ -111,6 +121,7 @@ public class BossMove : StateSystem<BossMove, BossState>
         public override void Exit()
         {
             PhaseSystem.BossProduct = false;
+            owner.Barrier.SetActive(true);
         }
     }
 
