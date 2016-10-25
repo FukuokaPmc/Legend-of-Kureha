@@ -16,12 +16,14 @@ public class BossMove : StateSystem<BossMove, BossState>
     private Scene_Manager scene;
     private bool bAwake;
     private PhaseSystem phase;
+    private GameObject Player;
     // Use this for initialization
     void Start()
     {
         anime = GetComponent<Animation>();
         scene = GameObject.Find("SceneManager").GetComponent<Scene_Manager>();
         //phase = GameObject.Find("PhaseSystem").GetComponent<PhaseSystem>();
+        Player = GameObject.FindGameObjectWithTag("Player");
 
         bAwake = false;
 
@@ -114,7 +116,9 @@ public class BossMove : StateSystem<BossMove, BossState>
     private class stateWait : State<BossMove>
     {
         public stateWait(BossMove owner) : base(owner) { }
-
+        private Vector3 dist;
+        private Vector3 BPos;
+        private Vector3 PPos;
         public override void Enter()
         {
             owner.anime.CrossFade("Idle");
@@ -122,7 +126,12 @@ public class BossMove : StateSystem<BossMove, BossState>
 
         public override void Execute()
         {
-
+            BPos = owner.transform.position;
+            BPos.y = 0;
+            PPos = owner.Player.transform.position;
+            PPos.y = 0;
+            dist = (PPos - BPos).normalized;
+            owner.transform.rotation = Quaternion.FromToRotation(Vector3.right, dist);
         }
 
         public override void Exit()
