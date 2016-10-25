@@ -466,7 +466,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             
             owner.cont.Move(MoveSize * Time.deltaTime);
 
-            if (Input.GetKeyDown(owner.Dash))
+            if (Input.GetKeyDown(owner.Dash) || owner.cont.enabled != true)
                 owner.ChangeState(PlayerState.Wait);
         }
 
@@ -606,7 +606,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 hit.gameObject.GetComponent<EnemyMove>().Stun();
             }    
         }
-        if (hit.gameObject.tag == "Boss")
+        if (hit.gameObject.tag == "Boss" || hit.gameObject.tag == "BossParts")
         {
             if (IsCurrentState(PlayerState.Dash))
             {

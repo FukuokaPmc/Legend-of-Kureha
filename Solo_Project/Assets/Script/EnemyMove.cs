@@ -17,6 +17,7 @@ public class EnemyMove : MonoBehaviour {
 
     private bool bStun; //突進が当たった場合のひるみ発生フラグ
     protected float StunTime; //ひるみ時間
+    private bool bHit; //突撃が当たった場合そのまま通過
 
     protected GameObject Shot;
     protected float HomingTime; //誘導する時間
@@ -30,6 +31,7 @@ public class EnemyMove : MonoBehaviour {
         nCount = 0;
         bStun = false;
         StunTime = 1.0f;
+        bHit = false;
         //ChargeTime = 1;
     }
 	public virtual void Start () {
@@ -59,6 +61,9 @@ public class EnemyMove : MonoBehaviour {
     //敵の突進
     protected void EnemyCharge(float fSpeed)
     {
+        Vector3 targetpos;
+        targetpos = target.position;
+        
         if (!bStun)
         {
             /* nCount += 1.0f * Time.deltaTime;
@@ -79,9 +84,13 @@ public class EnemyMove : MonoBehaviour {
                  cont.Move(ChargeVector * fSpeed);
                  //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
              }*/
-
-            this.transform.LookAt(target);
-            ChargeVector = (target.position - this.transform.position).normalized;
+            targetpos = new Vector3(targetpos.x, targetpos.y + 1.0f, targetpos.z);
+            if (target.position.z <= this.transform.position.z && !bHit)
+            {
+                this.transform.LookAt(targetpos);
+                ChargeVector = (targetpos - this.transform.position).normalized;
+                
+            }
             cont.Move(ChargeVector * fSpeed);
         }
     }
@@ -153,6 +162,7 @@ public class EnemyMove : MonoBehaviour {
                 
                 Debug.Log(Damage(0));
                 player.HPMinus(Damage(0));
+                bHit = true;
             }
             else
             {

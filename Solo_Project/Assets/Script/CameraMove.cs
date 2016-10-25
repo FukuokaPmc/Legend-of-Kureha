@@ -25,7 +25,7 @@ public class CameraMove : MonoBehaviour {
         posY = 3.0f;
         posZ = -6.0f;
 
-        Boss = GameObject.FindWithTag("Boss").transform;
+        //Boss = GameObject.FindWithTag("Boss").transform;
         Product = new bool[2];
         Product[0] = true;
         Product[1] = false;
@@ -65,7 +65,7 @@ public class CameraMove : MonoBehaviour {
         {
             cameraPos = (Boss.position - player.position).normalized * -6.0f;
             cameraPos.y += 4.0f;
-            if (Product[0])
+            if (PhaseSystem.BossProduct)
             {
                 if (!Product[1] && Vector3.Distance(this.transform.position, Boss.transform.position) >= 5.0f)
                 {
