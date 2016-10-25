@@ -205,7 +205,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
         //private bool end;
         private Vector3 HeightMove;
-
+        private float Count;
+        private float JumpWait;
         public override void Enter()
         {
             HeightMove.x = 0f;
@@ -214,20 +215,33 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             owner.anim.SetTrigger("Jump");
             //end = false;
+            Count = 0;
+            JumpWait = 0.1f;
         }
 
         public override void Execute()
         {
-            owner.Move();
+            
 
-            HeightMove.y -= owner.Gravity * Time.deltaTime;
+            
 
-            owner.cont.Move(HeightMove * Time.deltaTime);
+            if (Count >= JumpWait)
+            {
+                owner.Move();
+                HeightMove.y -= owner.Gravity * Time.deltaTime;
+                owner.cont.Move(HeightMove * Time.deltaTime);
 
-            if (owner.cont.isGrounded && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
-                owner.ChangeState(PlayerState.Move);
-            else if (owner.cont.isGrounded)
-                owner.ChangeState(PlayerState.Wait);
+                if (owner.cont.isGrounded && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
+                    owner.ChangeState(PlayerState.Move);
+                else if (owner.cont.isGrounded)
+                    owner.ChangeState(PlayerState.Wait);
+            }
+            else
+            {
+                Count += 1.0f * Time.deltaTime;
+            }
+
+            
 
             if (Input.GetKey(owner.Attack))
                 owner.ChangeState(PlayerState.Attack);
@@ -393,7 +407,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         public stateAttack(PlayerMove owner) : base(owner) { }
 
         private GameObject attackbox;
-
+        private Vector3 MoveSize;
         public override void Enter()
         {
             owner.anim.SetTrigger("Attack");
@@ -412,6 +426,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             }
             if (owner.anim.GetBool("AttackEnd"))
                 owner.ChangeState(PlayerState.Wait);
+
+            MoveSize = new Vector3(Mathf.Sin(owner.transform.eulerAngles.y * (Mathf.PI / 180.0f)), 0.0f, Mathf.Cos(owner.transform.eulerAngles.y * (Mathf.PI / 180.0f)));
+            owner.cont.Move(MoveSize * 0.02f);
         }
 
         public override void Exit()

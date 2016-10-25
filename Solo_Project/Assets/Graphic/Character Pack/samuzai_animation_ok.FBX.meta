@@ -306,12 +306,12 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump
       takeName: 
-      firstFrame: 190
+      firstFrame: 200
       lastFrame: 220
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
-      cycleOffset: 0
+      cycleOffset: 20
       loop: 1
       hasAdditiveReferencePose: 0
       loopTime: 0
@@ -334,7 +334,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Attack
       takeName: 
-      firstFrame: 230
+      firstFrame: 250
       lastFrame: 275
       wrapMode: 2
       orientationOffsetY: 0
