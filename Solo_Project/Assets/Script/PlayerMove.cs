@@ -517,10 +517,6 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             
         }
 
-
-
-        
-
     }
 
     private class stateRefrect : State<PlayerMove>
@@ -609,7 +605,14 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if(PhaseSystem.Boss)
             {
-                target = GameObject.FindGameObjectWithTag("Boss").transform;
+                if (GameObject.FindGameObjectWithTag("Boss").GetComponent<BossMove>().AuroraLast())
+                {
+                    target = GameObject.FindGameObjectWithTag("Boss").transform;
+                }
+                else
+                {
+                    target = GameObject.FindGameObjectWithTag("Aurora").transform;
+                }
 
                 bTarget = true;
                 Sight.SetActive(true);
@@ -640,7 +643,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 hit.gameObject.GetComponent<EnemyMove>().Stun();
             }    
         }
-        if (hit.gameObject.tag == "Boss" || hit.gameObject.tag == "BossParts")
+        if (hit.gameObject.tag == "Boss" || hit.gameObject.tag == "BossParts" || hit.gameObject.tag == "Aurora")
         {
             if (IsCurrentState(PlayerState.Dash))
             {

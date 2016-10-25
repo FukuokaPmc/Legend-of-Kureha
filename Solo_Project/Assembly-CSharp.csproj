@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Daemon_BloodyQueen\script\characterRotate.cs" />
      <Compile Include="Assets\Script\AttackCheck.cs" />
+     <Compile Include="Assets\Script\Aurora.cs" />
      <Compile Include="Assets\Script\BossMove.cs" />
      <Compile Include="Assets\Script\BossParts.cs" />
      <Compile Include="Assets\Script\CameraMove.cs" />

@@ -25,7 +25,7 @@ public class CameraMove : MonoBehaviour {
         posY = 3.0f;
         posZ = -6.0f;
 
-        //Boss = GameObject.FindWithTag("Boss").transform;
+        Boss = GameObject.FindWithTag("Boss").transform;
         Product = new bool[2];
         Product[0] = true;
         Product[1] = false;

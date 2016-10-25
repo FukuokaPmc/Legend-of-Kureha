@@ -17,6 +17,7 @@ public class BossMove : StateSystem<BossMove, BossState>
     private bool bAwake;
     private PhaseSystem phase;
     private GameObject Player;
+    private BossParts parts;
     // Use this for initialization
     void Start()
     {
@@ -24,6 +25,7 @@ public class BossMove : StateSystem<BossMove, BossState>
         scene = GameObject.Find("SceneManager").GetComponent<Scene_Manager>();
         //phase = GameObject.Find("PhaseSystem").GetComponent<PhaseSystem>();
         Player = GameObject.FindGameObjectWithTag("Player");
+        parts = GameObject.FindGameObjectWithTag("BossParts").GetComponent<BossParts>();
 
         bAwake = false;
 
@@ -191,9 +193,14 @@ public class BossMove : StateSystem<BossMove, BossState>
    void OnTriggerEnter(Collider other)
     {
         Debug.Log("hoge");
-        if(other.gameObject.tag == "Attack")
+        if(other.gameObject.tag == "Attack" && AuroraLast())
         {
             ChangeState(BossState.Dead);
         }
+    }
+
+    public bool AuroraLast()
+    {
+        return parts.LastAurora();
     }
 }
