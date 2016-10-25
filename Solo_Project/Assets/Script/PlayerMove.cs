@@ -18,7 +18,12 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     public float Gravity;
     private float HPMax; //最大HP
     private float HPNow; //今のHP
+    private float DashMax; //最大ダッシュゲージ
+    private float DashNow; //今のダッシュゲージ
+    private float StepUse; //ステップでのゲージ使用量
+    private float DashUse; //ダッシュでのゲージ使用量
     private HPGauge gauge;
+    private DashGauge dashgauge;
     private CharacterController cont;
     private Animator anim;
     private Vector3 MoveDir;
@@ -48,7 +53,12 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         Gravity = 10.0f;
         HPMax = 100.0f;
         HPNow = HPMax;
+        DashMax = 300.0f;
+        DashNow = DashMax;
+        StepUse = DashMax / 3.0f;
+        DashUse = 10.0f;
         gauge = GameObject.FindGameObjectWithTag("HPGauge").GetComponent<HPGauge>();
+        dashgauge = GameObject.FindGameObjectWithTag("DashGauge").GetComponent<DashGauge>();
 
         cont = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
@@ -102,6 +112,10 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 cont.enabled = true;
             }
         }
+        if(DashNow <= DashMax)
+        {
+            DashHeal();
+        }
         if (Input.GetKeyDown(Lockon) && !PhaseSystem.BossProduct)
             LockOn();
         if(!PhaseSystem.BossProduct)
@@ -134,11 +148,11 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
                 if (Input.GetKeyDown(owner.Dash))
                 {
-                    if (owner.bTarget)
+                    if (owner.bTarget && owner.DashNow >= owner.DashUse)
                     {
                         owner.ChangeState(PlayerState.Dash);
                     }
-                    else
+                    else if(owner.DashNow >= owner.StepUse)
                     {
                         owner.ChangeState(PlayerState.Step);
                     }
@@ -179,11 +193,11 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if (Input.GetKeyDown(owner.Dash))
             {
-                if (owner.bTarget)
+                if (owner.bTarget && owner.DashNow >= owner.DashUse)
                 {
                     owner.ChangeState(PlayerState.Dash);
                 }
-                else
+                else if (owner.DashNow >= owner.StepUse)
                 {
                     owner.ChangeState(PlayerState.Step);
                 }
@@ -248,11 +262,11 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if (Input.GetKeyDown(owner.Dash))
             {
-                if (owner.bTarget)
+                if (owner.bTarget && owner.DashNow >= owner.DashUse)
                 {
                     owner.ChangeState(PlayerState.Dash);
                 }
-                else
+                else if (owner.DashNow >= owner.StepUse)
                 {
                     owner.ChangeState(PlayerState.Step);
                 }
@@ -483,7 +497,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             
             owner.cont.Move(MoveSize * Time.deltaTime);
 
-            if (Input.GetKeyDown(owner.Dash) || owner.cont.enabled != true)
+            owner.DashMinus(owner.DashUse);
+
+            if (Input.GetKeyDown(owner.Dash) || owner.cont.enabled != true || owner.DashNow < owner.DashUse)
                 owner.ChangeState(PlayerState.Wait);
         }
 
@@ -545,6 +561,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             StepVelo = 10.0f;
             owner.Trail.SetActive(true);
             owner.Trail.GetComponent<Trail>().TimerStop();
+            owner.DashMinus(owner.StepUse);
         }
 
         public override void Execute()
@@ -646,4 +663,15 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         cont.enabled = false;
     }
 
+    public void DashMinus(float fDash)
+    {
+        DashNow -= fDash;
+        dashgauge.DashChange(DashNow / DashMax);
+    }
+
+    public void DashHeal()
+    {
+        DashNow += DashMax / 4.0f * Time.deltaTime;
+        dashgauge.DashChange(DashNow / DashMax);
+    }
 }

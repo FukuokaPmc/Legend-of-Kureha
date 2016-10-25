@@ -51,6 +51,7 @@
      <Compile Include="Assets\Script\BossParts.cs" />
      <Compile Include="Assets\Script\CameraMove.cs" />
      <Compile Include="Assets\Script\Check.cs" />
+     <Compile Include="Assets\Script\DashGauge.cs" />
      <Compile Include="Assets\Script\EnemyGanerator.cs" />
      <Compile Include="Assets\Script\EnemyMove.cs" />
      <Compile Include="Assets\Script\EnemyShot.cs" />
