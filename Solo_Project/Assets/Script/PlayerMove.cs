@@ -34,6 +34,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private Transform target; //ダッシュ用のターゲット
     private GameObject Sight;
     private bool bTarget;
+    private int TargetCount;
     private Vector3 RefrectSize; //跳ねっ返りのサイズ
 
     private float InvaridTime;
@@ -87,6 +88,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         DamageEff.transform.SetParent(this.transform);
         DamageEff.transform.position = this.transform.position;
         DamageEff.GetComponent<ParticleSystem>().Stop();
+
+        TargetCount = 0;
 
         Initialize();
     }
@@ -587,6 +590,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     {
         float Distance;
         float Near = 0;
+        
 
         if (!bTarget)
         {
@@ -612,13 +616,22 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
             if(PhaseSystem.Boss)
             {
+                
                 if (GameObject.FindGameObjectWithTag("Boss").GetComponent<BossMove>().AuroraLast())
                 {
                     target = GameObject.FindGameObjectWithTag("Boss").transform;
                 }
                 else
                 {
-                    target = GameObject.FindGameObjectWithTag("Aurora").transform;
+                    GameObject[] aurora = GameObject.FindGameObjectsWithTag("Aurora");
+
+                    if (TargetCount >= aurora.Length)
+                    {
+                        TargetCount = 0;
+                    }
+
+                    target = aurora[TargetCount].transform;
+                    TargetCount++;
                 }
 
                 bTarget = true;
