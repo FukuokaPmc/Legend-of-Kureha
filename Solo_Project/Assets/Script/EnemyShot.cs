@@ -19,7 +19,7 @@ public class EnemyShot : MonoBehaviour {
         if(obj.tag == "Player")
         {
             Debug.Log("被弾");
-           if( !obj.GetComponent<PlayerMove>().IsCurrentState(PlayerState.Step))
+           if( !obj.GetComponent<PlayerMove>().IsCurrentState(PlayerState.Step) && !obj.GetComponent<PlayerMove>().InvaridCheck())
             {
                 obj.GetComponent<PlayerMove>().HPMinus(fDamage);
             }

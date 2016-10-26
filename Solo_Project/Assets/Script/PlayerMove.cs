@@ -40,6 +40,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private float InvaridTime;
     private bool InvaridFlag;
     private float InvaridCount;
+    private bool AfterInvarid;
 
     private GameObject Trail;
 
@@ -75,6 +76,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         InvaridTime = 1.0f;
         InvaridFlag = false;
         InvaridCount = 0.0f;
+        AfterInvarid = false;
 
         Trail = transform.GetChild(3).gameObject;
         Trail.SetActive(false);
@@ -120,11 +122,26 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 InvaridFlag = false;
                 InvaridCount = 0;
                 cont.enabled = true;
+                AfterInvarid = true;
+            }
+        }
+        if (AfterInvarid)
+        {
+            InvaridCount += 1.0f * Time.deltaTime;
+
+            if (InvaridCount >= 1.0f)
+            {
+                InvaridCount = 0;
+                AfterInvarid = false;
             }
         }
         if(DashNow <= DashMax)
         {
             DashHeal();
+        }
+        if(HPNow <= 0)
+        {
+            Dead();
         }
         if (Input.GetKeyDown(Lockon) && !PhaseSystem.BossProduct)
             LockOn();
@@ -697,5 +714,15 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     {
         DashNow += DashMax / 4.0f * Time.deltaTime;
         dashgauge.DashChange(DashNow / DashMax);
+    }
+
+    public bool InvaridCheck()
+    {
+        return AfterInvarid;
+    }
+
+    public void Dead()
+    {
+
     }
 }
