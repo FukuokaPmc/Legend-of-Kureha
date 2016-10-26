@@ -46,6 +46,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private KeyCode Attack;
     private KeyCode Lockon;
     private KeyCode Jump;
+
+    public GameObject DamageEff;
     // Use this for initialization
     void Start () {
         Speed = 15.0f;
@@ -80,6 +82,11 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         Attack = KeyCode.J;
         Jump = KeyCode.M;
         Lockon = KeyCode.L;
+
+        DamageEff = Instantiate(DamageEff);
+        DamageEff.transform.SetParent(this.transform);
+        DamageEff.transform.position = this.transform.position;
+        DamageEff.GetComponent<ParticleSystem>().Stop();
 
         Initialize();
     }
@@ -664,6 +671,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     {
         InvaridFlag = true;
         cont.enabled = false;
+        DamageEff.GetComponent<ParticleSystem>().Play();
     }
 
     public void DashMinus(float fDash)
