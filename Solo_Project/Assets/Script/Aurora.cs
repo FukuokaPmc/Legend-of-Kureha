@@ -3,14 +3,22 @@ using System.Collections;
 
 public class Aurora : MonoBehaviour {
     private ParticleSystem particle;
+    private bool BreakFlag;
+    private int BreakCount;
 	// Use this for initialization
 	void Start () {
         particle = GetComponent<ParticleSystem>();
+        BreakFlag = false;
+        BreakCount = 0;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if(!particle.isPlaying)
+        if(BreakFlag)
+        {
+            BreakCount++;
+        }
+        if(!particle.isPlaying && BreakCount >= 20)
         {
             Destroy(this.gameObject);
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMove>().SightOff();
@@ -33,6 +41,7 @@ public class Aurora : MonoBehaviour {
             particle.startSpeed = 10.0f;
             particle.emission.SetBursts(burst);
             particle.Play();
+            BreakFlag = true;
         }
 
         if (col.gameObject.tag == "Player")

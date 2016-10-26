@@ -23,8 +23,8 @@ public class CameraMove : MonoBehaviour {
         lastPlayerX = player.position.x;
         Speed = 2.0f;
 
-        posY = 3.0f;
-        posZ = -6.0f;
+        posY = 7.0f;
+        posZ = -5.0f;
 
         if(SceneManager.GetActiveScene().name == "BossTest")
             Boss = GameObject.FindWithTag("Boss").transform;
@@ -60,7 +60,7 @@ public class CameraMove : MonoBehaviour {
 
             cameraPos = player.position;
             // if (cameraPos.y <= 5.0f)
-            cameraPos.y += 3.0f;
+            cameraPos.y += 5.0f;
             this.transform.LookAt(cameraPos);
         }
         else

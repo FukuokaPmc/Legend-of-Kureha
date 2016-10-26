@@ -122,6 +122,7 @@ public class BossMove : StateSystem<BossMove, BossState>
         {
             PhaseSystem.BossProduct = false;
             owner.Barrier.SetActive(true);
+            GameObject.FindGameObjectWithTag("BossStage").transform.GetChild(0).GetChild(0).GetComponent<Collider>().isTrigger = false;
         }
     }
 
