@@ -2,10 +2,9 @@
 using System.Collections;
 
 public class EnemyShot : MonoBehaviour {
-    private float fDamage;
+    public float fDamage;
 	// Use this for initialization
 	void Start () {
-        fDamage = 10.0f;
 
     }
 	

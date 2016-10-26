@@ -50,6 +50,9 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     private KeyCode Jump;
 
     public GameObject DamageEff;
+    public GameObject DeadEff;
+    private Scene_Manager scene;
+    private bool DeadFlag;
     // Use this for initialization
     void Start () {
         Speed = 15.0f;
@@ -91,7 +94,15 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         DamageEff.transform.position = this.transform.position;
         DamageEff.GetComponent<ParticleSystem>().Stop();
 
+        DeadEff = Instantiate(DeadEff);
+        //DeadEff.transform.SetParent(this.transform);
+        DeadEff.transform.position = this.transform.position;
+        DeadEff.GetComponent<ParticleSystem>().Stop();
+
         TargetCount = 0;
+        scene = GameObject.Find("SceneManager").GetComponent<Scene_Manager>();
+
+        DeadFlag = false;
 
         Initialize();
     }
@@ -142,6 +153,10 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         if(HPNow <= 0)
         {
             Dead();
+        }
+        else
+        {
+            DeadEff.transform.position = this.transform.position;
         }
         if (Input.GetKeyDown(Lockon) && !PhaseSystem.BossProduct)
             LockOn();
@@ -723,6 +738,21 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
 
     public void Dead()
     {
-
+        if (!DeadFlag)
+        {
+            transform.GetChild(1).gameObject.SetActive(false);
+            transform.GetChild(2).gameObject.SetActive(false);
+            cont.enabled = false;
+            DeadEff.GetComponent<ParticleSystem>().Play();
+            DeadFlag = true;
+        }
+        else
+        {
+            if (!DeadEff.GetComponent<ParticleSystem>().isPlaying)
+            {
+                scene.SceneChange();
+            }
+        }
+        
     }
 }

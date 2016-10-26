@@ -6,6 +6,11 @@ public enum BossState
     Sleep,
     Awake,
     Wait,
+    Charge,
+    Shock,
+    Blast,
+    Break,
+    Laser,
     Dead,
 }
 
@@ -39,6 +44,13 @@ public class BossMove : StateSystem<BossMove, BossState>
         stateList.Add(new stateSleep(this));
         stateList.Add(new stateAwake(this));
         stateList.Add(new stateWait(this));
+
+        stateList.Add(new stateCharge(this));
+        stateList.Add(new stateShock(this));
+        stateList.Add(new stateBlast(this));
+        stateList.Add(new stateBreak(this));
+        stateList.Add(new stateLaser(this));
+
         stateList.Add(new stateDead(this));
 
         stateMachine = new StateMachine<BossMove>();
@@ -146,6 +158,110 @@ public class BossMove : StateSystem<BossMove, BossState>
             PPos.y = 0;
             dist = (PPos - BPos).normalized;
            // owner.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.LookRotation(PPos - BPos), 0.5f * Time.deltaTime);
+        }
+
+        public override void Exit()
+        {
+
+        }
+    }
+
+    private class stateCharge : State<BossMove>
+    {
+        public stateCharge(BossMove owner) : base(owner) { }
+
+        public override void Enter()
+        {
+
+        }
+
+        public override void Execute()
+        {
+
+        }
+
+        public override void Exit()
+        {
+
+        }
+    }
+
+    //対地衝撃波
+    private class stateShock : State<BossMove>
+    {
+        public stateShock(BossMove owner) : base(owner) { }
+
+        public override void Enter()
+        {
+
+        }
+
+        public override void Execute()
+        {
+
+        }
+
+        public override void Exit()
+        {
+
+        }
+    }
+
+    //連続火柱
+    private class stateBlast : State<BossMove>
+    {
+        public stateBlast(BossMove owner) : base(owner) { }
+
+        public override void Enter()
+        {
+
+        }
+
+        public override void Execute()
+        {
+
+        }
+
+        public override void Exit()
+        {
+
+        }
+    }
+
+    //ダメージ
+    private class stateBreak : State<BossMove>
+    {
+        public stateBreak(BossMove owner) : base(owner) { }
+
+        public override void Enter()
+        {
+
+        }
+
+        public override void Execute()
+        {
+
+        }
+
+        public override void Exit()
+        {
+
+        }
+    }
+
+    //レーザー発射
+    private class stateLaser : State<BossMove>
+    {
+        public stateLaser(BossMove owner) : base(owner) { }
+
+        public override void Enter()
+        {
+
+        }
+
+        public override void Execute()
+        {
+
         }
 
         public override void Exit()
