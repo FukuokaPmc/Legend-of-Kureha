@@ -22,6 +22,8 @@ public class EnemyMove : MonoBehaviour {
     protected GameObject Shot;
     protected float HomingTime; //誘導する時間
 
+    public GameObject DeadEffect;
+
     void Awake()
     {
         cont = GetComponent<CharacterController>();
@@ -150,6 +152,13 @@ public class EnemyMove : MonoBehaviour {
         Debug.Log("hogehoge");
         bStun = true;
         nCount = 0;
+    }
+
+    public void Dead()
+    {
+        DeadEffect = Instantiate(DeadEffect);
+        DeadEffect.transform.position = this.transform.position;
+        Destroy(this.gameObject);
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)

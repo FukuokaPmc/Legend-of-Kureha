@@ -21,7 +21,7 @@ public class Check : MonoBehaviour {
         Debug.Log("滅びよ");
         if (col.gameObject.tag == "Enemy")
         {
-            Destroy(col.gameObject);
+            col.GetComponent<EnemyMove>().Dead();
             Player.GetComponent<PlayerMove>().SightOff();
         }
     }

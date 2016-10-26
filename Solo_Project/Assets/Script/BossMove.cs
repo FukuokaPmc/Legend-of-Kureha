@@ -144,7 +144,7 @@ public class BossMove : StateSystem<BossMove, BossState>
             PPos = owner.Player.transform.position;
             PPos.y = 0;
             dist = (PPos - BPos).normalized;
-            //owner.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.LookRotation(PPos - BPos), 0.5f * Time.deltaTime);
+            owner.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.LookRotation(PPos - BPos), 0.5f * Time.deltaTime);
         }
 
         public override void Exit()

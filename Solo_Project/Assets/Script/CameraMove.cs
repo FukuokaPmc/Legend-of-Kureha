@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class CameraMove : MonoBehaviour {
     private Transform player;
@@ -25,7 +26,8 @@ public class CameraMove : MonoBehaviour {
         posY = 3.0f;
         posZ = -6.0f;
 
-        Boss = GameObject.FindWithTag("Boss").transform;
+        if(SceneManager.GetActiveScene().name == "BossTest")
+            Boss = GameObject.FindWithTag("Boss").transform;
         Product = new bool[2];
         Product[0] = true;
         Product[1] = false;
