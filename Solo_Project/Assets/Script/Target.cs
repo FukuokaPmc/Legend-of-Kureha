@@ -34,6 +34,11 @@ public class Target : MonoBehaviour {
         
     }
 
+    public Transform GetTarget()
+    {
+        return target;
+    }
+
     public void CameraChange()
     {
         bMode = bMode ? false : true;

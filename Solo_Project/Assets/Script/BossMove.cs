@@ -24,6 +24,9 @@ public class BossMove : StateSystem<BossMove, BossState>
     private GameObject Player;
     private BossParts parts;
     private GameObject Barrier;
+    private float AttackCount;
+    private GameObject chargeEff;
+    private GameObject shockWaveEff;
     // Use this for initialization
     void Start()
     {
@@ -35,6 +38,12 @@ public class BossMove : StateSystem<BossMove, BossState>
         Barrier = GameObject.Find("Barrier");
         Barrier.SetActive(false);
         bAwake = false;
+        AttackCount = 0;
+
+        chargeEff = transform.GetChild(5).gameObject;
+        chargeEff.GetComponent<ParticleSystem>().Clear();
+        shockWaveEff = transform.GetChild(6).gameObject;
+        shockWaveEff.GetComponent<ParticleSystem>().Clear();
 
         Initialize();
     }
@@ -148,6 +157,7 @@ public class BossMove : StateSystem<BossMove, BossState>
         public override void Enter()
         {
             owner.anime.CrossFade("Idle");
+           owner.AttackCount = 0;
         }
 
         public override void Execute()
@@ -157,7 +167,13 @@ public class BossMove : StateSystem<BossMove, BossState>
             PPos = owner.Player.transform.position;
             PPos.y = 0;
             dist = (PPos - BPos).normalized;
-           // owner.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.LookRotation(PPos - BPos), 0.5f * Time.deltaTime);
+            owner.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.LookRotation(PPos - BPos), 0.5f * Time.deltaTime);
+
+            owner.AttackCount += 1.0f * Time.deltaTime;
+            if(owner.AttackCount >= 3.0f)
+            {
+                owner.ChangeState(BossState.Charge);
+            }
         }
 
         public override void Exit()
@@ -170,19 +186,41 @@ public class BossMove : StateSystem<BossMove, BossState>
     {
         public stateCharge(BossMove owner) : base(owner) { }
 
+        private int ChargeCount;
+        private Vector3 dist;
+        private Vector3 BPos;
+        private Vector3 PPos;
+
         public override void Enter()
         {
-
+            ChargeCount = 0;
         }
 
         public override void Execute()
         {
+            BPos = owner.transform.position;
+            BPos.y = 0;
+            PPos = owner.Player.transform.position;
+            PPos.y = 0;
+            dist = (PPos - BPos).normalized;
+            owner.transform.rotation = Quaternion.Slerp(owner.transform.rotation, Quaternion.LookRotation(PPos - BPos), 0.3f * Time.deltaTime);
+
+            if (!owner.chargeEff.GetComponent<ParticleSystem>().isPlaying)
+            {
+                owner.chargeEff.GetComponent<ParticleSystem>().Play();
+                ChargeCount++;
+            }
+            if(ChargeCount > 3)
+            {
+                owner.ChangeState(BossState.Shock);
+            }
+            
 
         }
 
         public override void Exit()
         {
-
+            owner.chargeEff.GetComponent<ParticleSystem>().Clear();
         }
     }
 
@@ -193,11 +231,16 @@ public class BossMove : StateSystem<BossMove, BossState>
 
         public override void Enter()
         {
-
+            owner.shockWaveEff.transform.position = new Vector3(0, 1, 0);
+            owner.shockWaveEff.GetComponent<ParticleSystem>().Play();
         }
 
         public override void Execute()
         {
+            if (!owner.shockWaveEff.GetComponent<ParticleSystem>().isPlaying)
+            {
+                owner.ChangeState(BossState.Wait);
+            }
 
         }
 

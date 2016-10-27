@@ -24,7 +24,7 @@ public class CameraMove : MonoBehaviour {
         Speed = 2.0f;
 
         posY = 7.0f;
-        posZ = -5.0f;
+        posZ = -8.0f;
 
         if(SceneManager.GetActiveScene().name == "BossTest")
             Boss = GameObject.FindWithTag("Boss").transform;
@@ -65,8 +65,17 @@ public class CameraMove : MonoBehaviour {
         }
         else
         {
-            cameraPos = (Boss.position - player.position).normalized * -6.0f;
-            cameraPos.y += 4.0f;
+            if (player.GetComponent<PlayerMove>().TargetCheck())
+            {
+                Target Sight = GameObject.FindGameObjectWithTag("Sight").GetComponent<Target>();
+                cameraPos = (Sight.GetTarget().position - player.position).normalized * -6.0f;
+                cameraPos.y += 4.0f;
+            }
+            else
+            {
+                cameraPos = (Boss.position - player.position).normalized * -6.0f;
+                cameraPos.y += 4.0f;
+            }
             if (PhaseSystem.BossProduct)
             {
                 if (!Product[1] && Vector3.Distance(this.transform.position, Boss.transform.position) >= 5.0f)

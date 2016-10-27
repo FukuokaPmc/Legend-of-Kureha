@@ -736,6 +736,11 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         return AfterInvarid;
     }
 
+    public bool TargetCheck()
+    {
+        return bTarget;
+    }
+
     public void Dead()
     {
         if (!DeadFlag)
