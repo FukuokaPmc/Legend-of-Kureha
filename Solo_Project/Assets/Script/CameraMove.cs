@@ -61,13 +61,15 @@ public class CameraMove : MonoBehaviour {
             cameraPos = player.position;
             // if (cameraPos.y <= 5.0f)
             cameraPos.y += 5.0f;
+            cameraPos.z -= 3.0f;
             this.transform.LookAt(cameraPos);
         }
         else
         {
+            Target Sight;
             if (player.GetComponent<PlayerMove>().TargetCheck())
             {
-                Target Sight = GameObject.FindGameObjectWithTag("Sight").GetComponent<Target>();
+                Sight = GameObject.FindGameObjectWithTag("Sight").GetComponent<Target>();
                 cameraPos = (Sight.GetTarget().position - player.position).normalized * -6.0f;
                 cameraPos.y += 4.0f;
             }
@@ -106,7 +108,15 @@ public class CameraMove : MonoBehaviour {
             {
                 this.transform.position = player.position + cameraPos;
             }
-            this.transform.LookAt(Boss.transform);
+            if (player.GetComponent<PlayerMove>().TargetCheck())
+            {
+                Sight = GameObject.FindGameObjectWithTag("Sight").GetComponent<Target>();
+                this.transform.LookAt(Sight.GetTarget());
+            }
+            else
+            {
+                this.transform.LookAt(Boss.transform);
+            }
         }
             
 

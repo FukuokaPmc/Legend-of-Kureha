@@ -56,8 +56,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
     // Use this for initialization
     void Start () {
         Speed = 15.0f;
-        JumpSpeed = 10.0f;
-        Gravity = 10.0f;
+        JumpSpeed = 15.0f;
+        Gravity = 15.0f;
         HPMax = 100.0f;
         HPNow = HPMax;
         DashMax = 300.0f;
@@ -182,7 +182,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
                 if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
                     owner.ChangeState(PlayerState.Move);
 
-                if (Input.GetKey(owner.Jump))
+                if (Input.GetKey(owner.Jump) && owner.cont.isGrounded)
                     owner.ChangeState(PlayerState.Jump);
 
                 if (Input.GetKey(owner.Attack))
@@ -224,7 +224,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         {
             end = owner.Move();
 
-            if (Input.GetKey(owner.Jump))
+            if (Input.GetKey(owner.Jump) && owner.cont.isGrounded)
                 owner.ChangeState(PlayerState.Jump);
 
             if (end)
@@ -435,7 +435,8 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             MoveDir = InpX * Camera.main.transform.TransformDirection(Vector3.right) + InpY * Camera.main.transform.TransformDirection(Vector3.forward);
             MoveDir.y = 0f;
             PlayerPos = MoveDir;
-            MoveDir.y -= Gravity * Time.deltaTime;
+            if(!IsCurrentState(PlayerState.Jump))
+                MoveDir.y -= Gravity * Time.deltaTime;
             MoveDir *= Speed;
 
             
@@ -750,6 +751,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
             cont.enabled = false;
             DeadEff.GetComponent<ParticleSystem>().Play();
             DeadFlag = true;
+            GameObject.Find("Timer").GetComponent<Timer>().StopTimer();
         }
         else
         {

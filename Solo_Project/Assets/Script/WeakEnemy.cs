@@ -13,6 +13,7 @@ public class WeakEnemy : EnemyMove
         Shot.transform.SetParent(this.transform);
         Shot.transform.localScale = Vector3.one;
         Shot.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 3.0f);
+        Shot.SetActive(false);
     }
 
     // Update is called once per frame

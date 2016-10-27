@@ -27,6 +27,7 @@ public class BossMove : StateSystem<BossMove, BossState>
     private float AttackCount;
     private GameObject chargeEff;
     private GameObject shockWaveEff;
+    private GameObject DeadEff;
     // Use this for initialization
     void Start()
     {
@@ -43,7 +44,11 @@ public class BossMove : StateSystem<BossMove, BossState>
         chargeEff = transform.GetChild(5).gameObject;
         chargeEff.GetComponent<ParticleSystem>().Clear();
         shockWaveEff = transform.GetChild(6).gameObject;
+        shockWaveEff.GetComponent<ParticleSystem>().Stop();
         shockWaveEff.GetComponent<ParticleSystem>().Clear();
+        DeadEff = transform.GetChild(7).gameObject;
+        DeadEff.GetComponent<ParticleSystem>().Stop();
+        DeadEff.GetComponent<ParticleSystem>().Clear();
 
         Initialize();
     }
@@ -231,7 +236,7 @@ public class BossMove : StateSystem<BossMove, BossState>
 
         public override void Enter()
         {
-            owner.shockWaveEff.transform.position = new Vector3(0, 1, 0);
+            owner.shockWaveEff.transform.localPosition = new Vector3(0, -9, 0);
             owner.shockWaveEff.GetComponent<ParticleSystem>().Play();
         }
 
@@ -318,14 +323,24 @@ public class BossMove : StateSystem<BossMove, BossState>
     {
         public stateDead(BossMove owner) : base(owner) { }
 
+        private float Count;
         public override void Enter()
         {
+            GameObject.Find("Timer").GetComponent<Timer>().StopTimer();
+            GameObject.Find("Timer").GetComponent<Timer>().CheckHiScore();
             owner.anime.CrossFade("Dead");
+            Count = 0;
         }
 
         public override void Execute()
         {
-            if(!owner.anime.isPlaying)
+            if (!owner.DeadEff.GetComponent<ParticleSystem>().isPlaying)
+            {
+                owner.DeadEff.GetComponent<ParticleSystem>().Play();
+            }
+
+
+            if (!owner.anime.isPlaying)
             {
                 owner.scene.SceneChange();
             }

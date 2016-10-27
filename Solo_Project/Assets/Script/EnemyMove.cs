@@ -6,7 +6,7 @@ public class EnemyMove : MonoBehaviour {
     protected CharacterController cont;
     private Rigidbody rigid;
     protected bool bAwake;
-    private float AwakeDistance; //どこまで近づいてきたら起動するか
+    protected float AwakeDistance; //どこまで近づいてきたら起動するか
     private float nCount;
     private Vector3 ChargeVector;
     protected float ChargeTime;  //突進までのインターバル
@@ -29,11 +29,12 @@ public class EnemyMove : MonoBehaviour {
         cont = GetComponent<CharacterController>();
         //rigid = GetComponent<Rigidbody>();
         bAwake = false;
-        AwakeDistance = 35.0f;
+        AwakeDistance = 60.0f;
         nCount = 0;
         bStun = false;
         StunTime = 1.0f;
         bHit = false;
+
         //ChargeTime = 1;
     }
 	public virtual void Start () {
@@ -49,6 +50,7 @@ public class EnemyMove : MonoBehaviour {
     //敵の弾
     protected void EnemyShot()
     {
+        Shot.SetActive(true);
         if (!bStun)
         {
              nCount += 1.0f * Time.deltaTime;
@@ -68,32 +70,22 @@ public class EnemyMove : MonoBehaviour {
         
         if (!bStun)
         {
-            /* nCount += 1.0f * Time.deltaTime;
-             if (nCount <= ChargeTime)
-             {
-                 this.transform.LookAt(target);
-                 ChargeVector = (target.position - this.transform.position).normalized;
-             }
-             else if (nCount <= ChargeTime + HormingTime)
-             {
-                 this.transform.LookAt(target);
-                 ChargeVector = (target.position - this.transform.position).normalized;
-                 cont.Move(ChargeVector * fSpeed);
-                 //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
-             }
-             else
-             {
-                 cont.Move(ChargeVector * fSpeed);
-                 //rigid.velocity = (ChargeVector * fSpeed * 100.0f);
-             }*/
-            targetpos = new Vector3(targetpos.x, targetpos.y + 1.0f, targetpos.z);
-            if (target.position.z <= this.transform.position.z && !bHit)
+            nCount += 1.0f * Time.deltaTime;
+            if (nCount <= ChargeTime)
             {
-                this.transform.LookAt(targetpos);
-                ChargeVector = (targetpos - this.transform.position).normalized;
-                
+                transform.Rotate(0,0,5);
             }
-            cont.Move(ChargeVector * fSpeed);
+            else
+            {
+                targetpos = new Vector3(targetpos.x, targetpos.y + 1.0f, targetpos.z);
+                if (target.position.z <= this.transform.position.z && !bHit)
+                {
+                    this.transform.LookAt(targetpos);
+                    ChargeVector = (targetpos - this.transform.position).normalized;
+
+                }
+                cont.Move(ChargeVector * fSpeed);
+            }
         }
     }
 
@@ -120,7 +112,7 @@ public class EnemyMove : MonoBehaviour {
 
     protected bool AwakeEnemy()
     {
-        if (this.transform.position.z - AwakeDistance < target.position.z )
+        if (this.transform.position.z - target.position.z  < AwakeDistance)
         {
             bAwake = true;
             return true;

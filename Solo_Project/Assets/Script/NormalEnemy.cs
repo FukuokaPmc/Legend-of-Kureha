@@ -6,7 +6,9 @@ public class NormalEnemy : EnemyMove
     // Use this for initialization
     public override void Start () {
         HormingTime = 0.3f;
-        ChargeTime = 0.7f;
+        ChargeTime = 2.0f;
+        AwakeDistance = 45.0f;
+        ChargeDamage = 30.0f;
     }
 
     // Update is called once per frame

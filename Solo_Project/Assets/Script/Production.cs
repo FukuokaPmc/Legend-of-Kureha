@@ -14,8 +14,13 @@ public class Production : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
-	}
+        Vector3 cameratarget;
+        cameratarget = transform.GetComponentInParent<PlayerMove>().transform.position;
+        cameratarget.y += 5.0f;
+        cameratarget.z -= 3.0f;
+        this.transform.LookAt(cameratarget);
+
+    }
 
     public void StartProduction(int nNum)
     {
