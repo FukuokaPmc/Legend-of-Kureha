@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour {
 	void Start () {
         if (!Load)
         {
-            if (!PlayerPrefs.HasKey("HiScore 1-1"))
+            if (!PlayerPrefs.HasKey("HiScore1-1"))
             {
                 HighScore = new float[6];
                 HighScore[0] = 2f;
@@ -26,12 +26,13 @@ public class Timer : MonoBehaviour {
             }
             else
             {
-                HighScore[0] = PlayerPrefs.GetFloat("HiScore 1-1");
-                HighScore[1] = PlayerPrefs.GetFloat("HiScore 1-2");
-                HighScore[2] = PlayerPrefs.GetFloat("HiScore 2-1");
-                HighScore[3] = PlayerPrefs.GetFloat("HiScore 2-2");
-                HighScore[4] = PlayerPrefs.GetFloat("HiScore 3-1");
-                HighScore[5] = PlayerPrefs.GetFloat("HiScore 3-2");
+                HighScore = new float[6];
+                HighScore[0] = PlayerPrefs.GetFloat("HiScore1-1", 99.0f);
+                HighScore[1] = PlayerPrefs.GetFloat("HiScore1-2", 99.0f);
+                HighScore[2] = PlayerPrefs.GetFloat("HiScore2-1", 99.0f);
+                HighScore[3] = PlayerPrefs.GetFloat("HiScore2-2", 99.0f);
+                HighScore[4] = PlayerPrefs.GetFloat("HiScore3-1", 99.0f);
+                HighScore[5] = PlayerPrefs.GetFloat("HiScore3-2", 99.0f);
             }
             Load = true;
         }
@@ -51,12 +52,12 @@ public class Timer : MonoBehaviour {
             Second = 0.0f;
             Min = 0.0f;
 
-            PlayerPrefs.SetFloat("HiScore 1-1", HighScore[0]);
-            PlayerPrefs.SetFloat("HiScore 1-2", HighScore[1]);
-            PlayerPrefs.SetFloat("HiScore 2-1", HighScore[2]);
-            PlayerPrefs.SetFloat("HiScore 2-2", HighScore[3]);
-            PlayerPrefs.SetFloat("HiScore 3-1", HighScore[4]);
-            PlayerPrefs.SetFloat("HiScore 3-2", HighScore[5]);
+            PlayerPrefs.SetFloat("HiScore1-1", HighScore[0]);
+            PlayerPrefs.SetFloat("HiScore1-2", HighScore[1]);
+            PlayerPrefs.SetFloat("HiScore2-1", HighScore[2]);
+            PlayerPrefs.SetFloat("HiScore2-2", HighScore[3]);
+            PlayerPrefs.SetFloat("HiScore3-1", HighScore[4]);
+            PlayerPrefs.SetFloat("HiScore3-2", HighScore[5]);
             PlayerPrefs.Save();
         }
         
