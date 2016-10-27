@@ -4,25 +4,62 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour {
 
-    private float Second;
-    private float Min;
+    static float Second;
+    static float Min;
     private bool StartFlag;
-    private float[] HighScore;
+    static public float[] HighScore;
+    static bool Load;
 	// Use this for initialization
 	void Start () {
-        DontDestroyOnLoad(this.gameObject);
+        if (!Load)
+        {
+            if (!PlayerPrefs.HasKey("HiScore 1-1"))
+            {
+                HighScore = new float[6];
+                HighScore[0] = 2f;
+                HighScore[1] = 0f;
+                HighScore[2] = 3f;
+                HighScore[3] = 30f;
+                HighScore[4] = 5f;
+                HighScore[5] = 50.6f;
+                
+            }
+            else
+            {
+                HighScore[0] = PlayerPrefs.GetFloat("HiScore 1-1");
+                HighScore[1] = PlayerPrefs.GetFloat("HiScore 1-2");
+                HighScore[2] = PlayerPrefs.GetFloat("HiScore 2-1");
+                HighScore[3] = PlayerPrefs.GetFloat("HiScore 2-2");
+                HighScore[4] = PlayerPrefs.GetFloat("HiScore 3-1");
+                HighScore[5] = PlayerPrefs.GetFloat("HiScore 3-2");
+            }
+            Load = true;
+        }
+        //Second = 0.0f;
+        //Min = 0.0f;
+        if (SceneManager.GetActiveScene().name != "Stage1")
+        {
+            StartFlag = false;
+        }
+        else
+        {
+            StartFlag = true;
+        }
 
-        Second = 0.0f;
-        Min = 0.0f;
-        StartFlag = false;
+        if(SceneManager.GetActiveScene().name == "title")
+        {
+            Second = 0.0f;
+            Min = 0.0f;
 
-        HighScore = new float[6];
-        HighScore[0] = 2f;
-        HighScore[1] = 0f;
-        HighScore[2] = 3f;
-        HighScore[3] = 30f;
-        HighScore[4] = 5f;
-        HighScore[5] = 50.6f;
+            PlayerPrefs.SetFloat("HiScore 1-1", HighScore[0]);
+            PlayerPrefs.SetFloat("HiScore 1-2", HighScore[1]);
+            PlayerPrefs.SetFloat("HiScore 2-1", HighScore[2]);
+            PlayerPrefs.SetFloat("HiScore 2-2", HighScore[3]);
+            PlayerPrefs.SetFloat("HiScore 3-1", HighScore[4]);
+            PlayerPrefs.SetFloat("HiScore 3-2", HighScore[5]);
+            PlayerPrefs.Save();
+        }
+        
     }
 	
 	// Update is called once per frame
@@ -60,6 +97,7 @@ public class Timer : MonoBehaviour {
 
     public void ResetTimer()
     {
+        
         Second = 0.0f;
         Min = 0.0f;
     }

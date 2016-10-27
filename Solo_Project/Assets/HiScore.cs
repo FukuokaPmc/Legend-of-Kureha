@@ -34,7 +34,6 @@ public class HiScore : MonoBehaviour {
         int Count = 0;
         for (int n = 0; n < Second.Length; n++)
         {
-            Debug.Log(box[0]);
             Min[n] = box[Count];
             Second[n] = box[Count + 1];
             Count += 2;
