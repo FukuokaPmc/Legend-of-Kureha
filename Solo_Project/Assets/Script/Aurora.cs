@@ -18,7 +18,7 @@ public class Aurora : MonoBehaviour {
         {
             BreakCount++;
         }
-        if(!particle.isPlaying && BreakCount >= 20)
+        if(!particle.isPlaying && BreakCount >= 80)
         {
             Destroy(this.gameObject);
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMove>().SightOff();
