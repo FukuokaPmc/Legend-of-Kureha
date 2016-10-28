@@ -77,4 +77,9 @@ public class StageGenerator : MonoBehaviour {
         }
 
     }
+
+    public void StageReset()
+    {
+        StageCount = 0;
+    }
 }

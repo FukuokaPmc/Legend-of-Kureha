@@ -18,6 +18,7 @@ public class Production : MonoBehaviour {
         cameratarget = transform.GetComponentInParent<PlayerMove>().transform.position;
         cameratarget.y += 5.0f;
         cameratarget.z -= 3.0f;
+        this.transform.localPosition = CameraPos[0];
         this.transform.LookAt(cameratarget);
 
     }

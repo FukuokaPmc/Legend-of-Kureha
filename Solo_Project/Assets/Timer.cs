@@ -44,6 +44,7 @@ public class Timer : MonoBehaviour {
         }
         else
         {
+            GameObject.Find("StageRoad").GetComponent<StageGenerator>().StageReset();
             StartFlag = true;
         }
 

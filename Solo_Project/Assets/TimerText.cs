@@ -20,7 +20,7 @@ public class TimerText : MonoBehaviour {
 
         if (SceneManager.GetActiveScene().name == "Result")
         {
-            transform.localPosition = new Vector3(-265, -31, 0);
+            transform.localPosition = new Vector3(0, -30, 0);
         }
         else
         {

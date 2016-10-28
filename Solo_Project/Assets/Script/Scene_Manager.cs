@@ -33,8 +33,8 @@ public class Scene_Manager : MonoBehaviour {
                 
                 if (scene.name == "title")
                 {
-                   // timer.ResetTimer();
-                   // timer.StartTimer();
+                    // timer.ResetTimer();
+                    // timer.StartTimer();
                     SceneManager.LoadScene("Stage1");
                 }
                 /* if (scene.name == "Stage1")

@@ -66,7 +66,7 @@ public class EnemyGanerator : MonoBehaviour {
 	void Update () {
         for (int n = 0; n < ENEMY.Length; n++)
         {
-            if(ENEMY[n] != null && Player.position.z >= ENEMY[n].transform.position.z + 10.0f)
+            if(ENEMY[n] != null && Player.position.z >= ENEMY[n].transform.position.z + 5.0f)
             {
                 Destroy(ENEMY[n].gameObject);
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMove>().SightOff();
