@@ -757,7 +757,7 @@ public class PlayerMove : StateSystem<PlayerMove, PlayerState> {
         {
             if (!DeadEff.GetComponent<ParticleSystem>().isPlaying)
             {
-                scene.SceneChange();
+                scene.GameOver();
             }
         }
         
